@@ -39,9 +39,6 @@ body {
             height: $sidebar-item-height;
             padding: ($sidebar-item-height - $sidebar-item-icon-size)/2;
             box-sizing: border-box;
-
-            justify-self: center;
-            
         }
 
         // make the top icon slightly bigger than the other icons
@@ -49,7 +46,8 @@ body {
             padding: ($sidebar-item-height - $sidebar-top-icon-size)/2;
         }
 
-        &.redirect-button {
+        // aka the buttons that redirect to other sites
+        &.transparent-button:not(.top-icon) {
             padding-right: ($sidebar-item-height - $sidebar-item-icon-size)/2;
 
             // make the active item's text bigger and bold
@@ -67,15 +65,12 @@ body {
             font-weight: bold;
     
             align-self: normal;
+
+            // make the post button change color on hover or press
+            &:hover {background-color: $sidebar-post-button-hover-color;}
+            &:active {background-color: $sidebar-post-button-active-color;}    
+
         }
-
-        // make all buttons but the post button change color on hover or press
-        &:not(.post-button):hover {background-color: $button-hover-color;}
-        &:not(.post-button):active {background-color: $button-active-color;}
-
-        // make the post button change color on hover or press
-        &.post-button:hover {background-color: $sidebar-post-button-hover-color;}
-        &.post-button:active {background-color: $sidebar-post-button-active-color;}    
     }
 }
 
@@ -91,3 +86,6 @@ body {
 
     box-sizing: border-box;
 }
+
+.transparent-button:hover {background-color: $button-hover-color;}
+.transparent-button:active {background-color: $button-active-color;}

@@ -70,9 +70,53 @@
                 width: 80%;
                 aspect-ratio: 1;
 
+                object-fit: scale-down;
+
                 border-radius: $border-radius;
                 background-color: $background-color;
             }
         }
     }
+}
+
+
+#image-inspector {
+    background-color: $feed-image-inspector-background-color;
+
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    >img {
+        cursor: default;
+        object-fit: scale-down;
+
+        max-width: 70%;
+        max-height: 80%;
+    }
+
+    >.transparent-button {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        top: 0;
+        right: 0;
+
+        margin: 10px;
+        color: $icon-color;
+        border-radius: $border-radius;
+    }
+
+    &.hidden {
+        display: none;
+    }
+
 }

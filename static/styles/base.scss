@@ -1,0 +1,93 @@
+@import "variables";
+
+body {
+    background-color: $background-color;
+    margin: 0;
+}
+
+#sidebar {
+    position: absolute;
+    height: 100vh;
+    width: $sidebar-item-width;
+
+    margin-left: $sidebar-width - $sidebar-item-width;
+    padding: 10px 10px 0 0;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    row-gap: $sidebar-item-row-gap;
+
+    >.item {
+        height: $sidebar-item-height;
+        align-self: flex-start;
+
+        cursor: pointer;
+        border-radius: $border-radius;
+
+        display: flex;
+        align-items: center;
+
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-size: 16px;
+        color: $font-color;
+
+        // item icon
+        >.icon {
+            color: $icon-color;
+            width: $sidebar-item-height;
+            height: $sidebar-item-height;
+            padding: ($sidebar-item-height - $sidebar-item-icon-size)/2;
+            box-sizing: border-box;
+
+            justify-self: center;
+            
+        }
+
+        // make the top icon slightly bigger than the other icons
+        &.top-icon>img {
+            padding: ($sidebar-item-height - $sidebar-top-icon-size)/2;
+        }
+
+        &.redirect-button {
+            padding-right: ($sidebar-item-height - $sidebar-item-icon-size)/2;
+
+            // make the active item's text bigger and bold
+            &.active-item {
+                font-size: 18px;
+                font-weight: bold;
+            }
+        }
+
+        &.post-button {
+            justify-content: center;
+            background-color: $sidebar-post-button-background-color;
+    
+            font-size: 18px;
+            font-weight: bold;
+    
+            align-self: normal;
+        }
+
+        // make all buttons but the post button change color on hover or press
+        &:not(.post-button):hover {background-color: $button-hover-color;}
+        &:not(.post-button):active {background-color: $button-active-color;}
+
+        // make the post button change color on hover or press
+        &.post-button:hover {background-color: $sidebar-post-button-hover-color;}
+        &.post-button:active {background-color: $sidebar-post-button-active-color;}    
+    }
+}
+
+#content {
+    position: absolute;
+    height: 100vh;
+    width: $content-width;
+    left: $sidebar-width;
+
+    border-width: 0px $content-border-width 0px $content-border-width;
+    border-style: solid;
+    border-color: $content-border-color;
+
+    box-sizing: border-box;
+}

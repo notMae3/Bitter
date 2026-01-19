@@ -1,0 +1,28 @@
+// global
+$font-color: #c0c0c0;
+$secondary-font-color: #999999;
+$icon-color: $font-color;
+$background-color: #1b1b1b;
+$button-hover-color: #313131;
+$button-active-color: #2b2b2b;
+$border-radius: 24px;
+
+// primary sidebar
+$sidebar-width: 30%;
+$sidebar-item-width: 16%;
+$sidebar-item-height: 60px;
+$sidebar-item-icon-size: 30px;
+$sidebar-top-icon-size: 40px;
+$sidebar-item-row-gap: 15px;
+$sidebar-post-button-background-color: #367900;
+$sidebar-post-button-hover-color: #469b00;
+$sidebar-post-button-active-color: #2b5f00;
+
+// general content related
+$content-width: 100% - $sidebar-width*2;
+$content-border-color: $font-color;
+$content-border-width: 1px;
+
+// content - feed
+$feed-post-pfp-stripe-width: 40px;
+$feed-post-background-color: #2b2b2b;

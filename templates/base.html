@@ -1,39 +1,29 @@
 <!DOCTYPE html>
 
 <head>
-    <title>Bitter</title>
+    <title>{% block title %}Bitter{% endblock %}</title>
     
     <meta charset="utf-8">
     <meta lang="en">
     
     <link rel="shortcut icon", type="image/x-icon", href="../static/img/favicon_48.png">
     <link rel="stylesheet", type="text/css", href="../static/styles/base.css">
-    <link rel="stylesheet", type="text/css", href="../static/styles/feed.css">
+    {% block style %}
+    {% endblock %}
 </head>
 
 <body>
     <div id="sidebar">
         <div class="item transparent-button top-icon" onclick="console.log('top icon')"> <img class="icon" src="../static/img/favicon_128.png" alt="Website icon"></use></svg></div>
-        <div class="item transparent-button active-item" onclick="console.log('home')">  <svg class="icon"><use href="../static/img/sprites.svg#icon-home"></use></svg>Home</div>
+        <div class="item transparent-button active-item" onclick="console.log('home')">  <svg class="icon"><use href="../static/img/sprites.svg#icon-views"></use></svg>Home</div>
         <div class="item transparent-button" onclick="console.log('chat')">              <svg class="icon"><use href="../static/img/sprites.svg#icon-chat"></use></svg>Chat</div>
         <div class="item transparent-button" onclick="console.log('profile')">           <svg class="icon"><use href="../static/img/sprites.svg#icon-profile"></use></svg>Profile</div>
         <div class="item post-button" onclick="console.log('post')">Post</div>
     </div>
     <div id="content">
-        <div id="image-inspector" class="hidden">
-            <img src="../static/img/testing-wide.png" alt="">
-            <svg class="transparent-button"><use href="../static/img/sprites.svg#icon-x"></use></svg>
-        </div>
-
-        <div class="post">
-            <div class="pfp-stripe">
-                <img src="../static/img/favicon_128.png" alt="User's profile picture">
-            </div>
-            <div class="content">
-                <div class="user"><p class="display-name">Display name</p><p class="username">@Username</p></div>
-                <p class="post-body">This is some super interesting post bread This is some super interesting post bread This is some super interesting post bread This is some super interesting post bread</p>
-                <div class="img-container"><img src="../static/img/testing-wide.png" alt=""></div>
-            </div>
-        </div>
+        {% block content %}
+        {% endblock %}
     </div>
+
+
 </body>

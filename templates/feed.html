@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block style %}
+<link rel="stylesheet", type="text/css", href="../static/styles/feed.css">
+{% endblock %}
 
+{% block content %}
+{% include "_feed.html" %}
 {% endblock %}

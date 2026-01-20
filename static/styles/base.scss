@@ -80,12 +80,20 @@ body {
     width: $content-width;
     left: $sidebar-width;
 
-    border-width: 0px $content-border-width 0px $content-border-width;
-    border-style: solid;
-    border-color: $content-border-color;
+    border-left: $content-border-width $content-border-color solid;
+    border-right: $content-border-width $content-border-color solid;
+
+    display: flex;
+    flex-direction: column;
+    row-gap: 15px;
 
     box-sizing: border-box;
+    overflow: scroll;
 }
 
+.transparent-button {cursor: pointer;}
 .transparent-button:hover {background-color: $button-hover-color;}
 .transparent-button:active {background-color: $button-active-color;}
+
+.hidden {display: none !important;}
+.pointer-events-off {pointer-events: none !important;}

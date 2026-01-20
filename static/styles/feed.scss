@@ -1,16 +1,19 @@
 @import "variables";
 
 .post {
-    background-color: $feed-post-background-color;
-    width: 100%;
-    // height: 400px;
-
     display: flex;
+    width: 100%;
 
-    >.pfp-stripe {
-        // background-color: green;
-        max-width: $feed-post-pfp-stripe-width;
-        min-width: $feed-post-pfp-stripe-width;
+    cursor: pointer;
+
+    // apply a bottom border to all posts but the last one
+    &:not(:last-of-type) {border-bottom: $content-border-width $content-border-color solid;}
+
+    >.pfp-strip {
+        min-width: $feed-post-pfp-strip-width;
+        max-width: $feed-post-pfp-strip-width;
+
+        margin: 0 2.5px 0 2.5px;
 
         >img {
             width: 100%;
@@ -24,19 +27,17 @@
     }
 
     >.content {
-        // background-color: purple;
         flex-grow: 1;
+        margin-right: 5px;
 
-        p {
-            margin: 0;
-        }
+        p {margin: 0;}
 
         >.user {
             display: flex;
             align-items: end;
             column-gap: 5px;
 
-            height: $feed-post-pfp-stripe-width/2;
+            height: $feed-post-pfp-strip-width/2;
             font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 
             >.display-name {
@@ -57,23 +58,60 @@
         }
 
         >.img-container {
-            // background-color: green;
-
+            position: relative;
             display: flex;
-            justify-content: center;
+            align-items: center;
 
-            padding: 10px;
-            box-sizing: border-box;
+            width: 80%;
+            aspect-ratio: 1;
+
+            margin: 10px auto 10px auto;
+            overflow: hidden;
+
+            // cursor: pointer;
+            pointer-events: all;
+
+            border-radius: $border-radius;
+            border: $content-border-width $content-border-color solid;
+            background-color: $background-color;
 
             >img {
-                // background-color: orange;
-                width: 80%;
-                aspect-ratio: 1;
+                position: absolute;
+                width: 100%;
+            }
 
-                object-fit: scale-down;
-
-                border-radius: $border-radius;
+            >.click-through-preventer {
+                position: absolute;
+                width: 100%;
+                height: 100%;
                 background-color: $background-color;
+            }
+        }
+
+        >.engagement-strip {
+            height: $feed-post-engagement-bar-height;
+            width: 80%;
+            margin: 0px auto 5px auto;
+
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+
+            >div {
+                display: flex;
+                align-items: center;
+                height: $feed-post-engagement-bar-height;
+
+                color: $font-color;
+
+                >.icon {
+                    max-height: 100%;
+                    aspect-ratio: 1;
+                    margin-right: 6px;
+
+                    border-radius: $border-radius;
+                    padding: 2.5px;
+                    box-sizing: border-box;
+                }
             }
         }
     }
@@ -114,9 +152,4 @@
         color: $icon-color;
         border-radius: $border-radius;
     }
-
-    &.hidden {
-        display: none;
-    }
-
 }

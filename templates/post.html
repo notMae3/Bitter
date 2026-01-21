@@ -1,12 +1,28 @@
 {% extends "base.html" %}
+{% import "components/_feed.html" as feed %}
+{% import "components/_reply_template.html" as reply_template %}
 
 {% block title %}Bitter - Post{% endblock %}
 
 {% block style %}
+<link rel="stylesheet", type="text/css", href="{{ url_for('static', filename='styles/post.css') }}">
+{{ feed.style() }}
+<!-- reply_template.style() is not called since its dependencies are included in feed.style() -->
 {% endblock %}
 
 {% block content %}
-<div></div> <!--post header-->
-{% includes "_feed.html" %}
-<div></div> <!--comments-->
+    <div id="post-header"><a href="{{ referer if referer else url_for('timeline') }}"><svg class="icon transparent-button"><use href="../static/img/sprites.svg#icon-back"></use></svg></a>Post</div>
+    {{ feed.content(feed_type) }}
+    <form id="new-reply-form">
+        <textarea id="reply-text-input" maxlength="140" placeholder="Reply"></textarea>
+        <button type="submit">
+            <svg class="icon transparent-button"><use href="../static/img/sprites.svg#icon-back"></use></svg>
+        </button>
+    </form>
+    <script>document.getElementById("new-reply-form").reset()</script>
+
+    <div id="past-reply-container">
+        {{ reply_template.content() }}
+    </div>
 {% endblock %}
+

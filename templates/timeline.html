@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% import "components/_feed.html" as feed %}
+
+{% block style %}
+{{ feed.style() }}
+{% endblock %}
+
+{% block content %}
+{{ feed.content(feed_type) }}
+{% endblock %}

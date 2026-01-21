@@ -1,13 +1,18 @@
-@import "variables";
+@import "../variables";
 
 .post {
     display: flex;
     width: 100%;
 
-    cursor: pointer;
+    // if this post is being displayed in a timeline feed
+    &.timeline-feed {
+        cursor: pointer;
 
-    // apply a bottom border to all posts but the last one
-    &:not(:last-of-type) {border-bottom: $content-border-width $content-border-color solid;}
+        // apply a bottom border to all timeline posts but the last one
+        &:not(:last-of-type) {
+            border-bottom: $default-border;
+        }
+    }
 
     >.pfp-strip {
         min-width: $feed-post-pfp-strip-width;
@@ -28,14 +33,16 @@
 
     >.content {
         flex-grow: 1;
-        margin-right: 5px;
+        margin-right: $post-margin-right;
 
         p {margin: 0;}
 
         >.user {
-            display: flex;
-            align-items: end;
+            display: grid;
+            grid-template-columns: auto auto 1fr;
+
             column-gap: 5px;
+            align-items: end;
 
             height: $feed-post-pfp-strip-width/2;
             font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -48,6 +55,13 @@
             >.username {
                 font-size: 14px;
                 color: $secondary-font-color;
+            }
+
+            >.date-posted {
+                position: absolute;
+                font-size: 14px;
+                color: $secondary-font-color;
+                justify-self: end;
             }
         }
 
@@ -68,16 +82,17 @@
             margin: 10px auto 10px auto;
             overflow: hidden;
 
-            // cursor: pointer;
             pointer-events: all;
 
             border-radius: $border-radius;
-            border: $content-border-width $content-border-color solid;
+            border: $default-border;
             background-color: $background-color;
 
             >img {
                 position: absolute;
                 width: 100%;
+
+                user-select: none;
             }
 
             >.click-through-preventer {
@@ -91,7 +106,7 @@
         >.engagement-strip {
             height: $feed-post-engagement-bar-height;
             width: 80%;
-            margin: 0px auto 5px auto;
+            margin: 0px auto $post-margin-right auto;
 
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -108,48 +123,11 @@
                     aspect-ratio: 1;
                     margin-right: 6px;
 
-                    border-radius: $border-radius;
+                    border-radius: 100%;
                     padding: 2.5px;
                     box-sizing: border-box;
                 }
             }
         }
-    }
-}
-
-
-#image-inspector {
-    background-color: $feed-image-inspector-background-color;
-
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    left: 0;
-    top: 0;
-
-    cursor: pointer;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    >img {
-        cursor: default;
-        object-fit: scale-down;
-
-        max-width: 70%;
-        max-height: 80%;
-    }
-
-    >.transparent-button {
-        position: absolute;
-        width: 40px;
-        height: 40px;
-        top: 0;
-        right: 0;
-
-        margin: 10px;
-        color: $icon-color;
-        border-radius: $border-radius;
     }
 }

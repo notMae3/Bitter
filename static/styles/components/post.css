@@ -1,0 +1,145 @@
+.post {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+}
+
+.post.timeline-feed {
+  cursor: pointer;
+}
+
+.post.timeline-feed:not(:last-of-type) {
+  border-bottom: 1px #c0c0c0 solid;
+}
+
+.post > .pfp-strip {
+  min-width: 40px;
+  max-width: 40px;
+  margin: 0 2.5px 0 2.5px;
+}
+
+.post > .pfp-strip > img {
+  width: 100%;
+  -o-object-fit: scale-down;
+     object-fit: scale-down;
+  padding: 3px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  border-radius: 100%;
+}
+
+.post > .content {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  margin-right: 5px;
+}
+
+.post > .content p {
+  margin: 0;
+}
+
+.post > .content > .user {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: auto auto 1fr;
+      grid-template-columns: auto auto 1fr;
+  -webkit-column-gap: 5px;
+          column-gap: 5px;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: end;
+  height: 20px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.post > .content > .user > .display-name {
+  font-size: 18px;
+  color: #c0c0c0;
+}
+
+.post > .content > .user > .username {
+  font-size: 14px;
+  color: #787878;
+}
+
+.post > .content > .user > .date-posted {
+  position: absolute;
+  font-size: 14px;
+  color: #787878;
+  -ms-grid-column-align: end;
+      justify-self: end;
+}
+
+.post > .content > .post-body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 16px;
+  color: #c0c0c0;
+}
+
+.post > .content > .img-container {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 80%;
+  aspect-ratio: 1;
+  margin: 10px auto 10px auto;
+  overflow: hidden;
+  pointer-events: all;
+  border-radius: 24px;
+  border: 1px #c0c0c0 solid;
+  background-color: #1b1b1b;
+}
+
+.post > .content > .img-container > img {
+  position: absolute;
+  width: 100%;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.post > .content > .img-container > .click-through-preventer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #1b1b1b;
+}
+
+.post > .content > .engagement-strip {
+  height: 20px;
+  width: 80%;
+  margin: 0px auto 5px auto;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (1fr)[3];
+      grid-template-columns: repeat(3, 1fr);
+}
+
+.post > .content > .engagement-strip > div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 20px;
+  color: #c0c0c0;
+}
+
+.post > .content > .engagement-strip > div > .icon {
+  max-height: 100%;
+  aspect-ratio: 1;
+  margin-right: 6px;
+  border-radius: 100%;
+  padding: 2.5px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+/*# sourceMappingURL=post.css.map */

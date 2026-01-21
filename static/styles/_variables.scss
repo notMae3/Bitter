@@ -6,6 +6,7 @@ $background-color: #1b1b1b;
 $button-hover-color: #313131;
 $button-active-color: #2b2b2b;
 $border-radius: 24px;
+$popup-background-color: #222222d5;
 
 // primary sidebar
 $sidebar-width: 32.5%;
@@ -22,8 +23,13 @@ $sidebar-post-button-active-color: #2b5f00;
 $content-width: 100% - $sidebar-width*2;
 $content-border-color: $font-color;
 $content-border-width: 1px;
+$default-border: $content-border-width $content-border-color solid;
 
 // content - feed
 $feed-post-pfp-strip-width: 40px;
-$feed-image-inspector-background-color: #222222d5;
 $feed-post-engagement-bar-height: 20px;
+
+// content - post
+$post-header-height: 50px;
+$post-margin-right: 5px;
+$post-reply-row-gap: 20px;

@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 from dotenv import load_dotenv
 import os
 
@@ -12,8 +12,17 @@ app.config.update(
 )
 
 @app.route("/")
-def index():
-    return render_template("feed.html")
+def timeline():
+    print(url_for('static', filename='styles/components/feed.css'))
+    return render_template("timeline.html", feed_type="timeline")
+
+@app.route(f"/p/<int:post_id>")
+def post(post_id):
+    print(post_id)
+
+    return render_template("post.html", feed_type="post")
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+    # TODO del clickthrough preventer?

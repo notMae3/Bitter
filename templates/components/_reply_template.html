@@ -1,0 +1,16 @@
+{% macro style() %}
+<link rel="stylesheet", type="text/css", href="{{ url_for('static', filename='styles/components/post.css') }}">
+{% endmacro %}
+
+{% macro content() %}
+<div id="{{ template_type if template_type else 'reply' }}-template" class="post{{' timeline-feed' if feed_type == 'timeline' else ''}}">
+    <div class="pfp-strip">
+        <img src="../static/img/favicon_128.png" alt="User's profile picture">
+    </div>
+    <div class="content">
+        <div class="user"><p class="display-name">Display name</p><p class="username">@Username</p><p class="date-posted">2026-01-01 10:10</p></div>
+        <p class="post-body">This is some super interesting post bread This is some super interesting post bread This is some super interesting post bread This is some super interesting post bread</p>
+        {% block post_exclusive %}{% endblock %}
+    </div>
+</div>
+{% endmacro %}

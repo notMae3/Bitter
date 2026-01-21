@@ -13,17 +13,44 @@
 </head>
 
 <body>
+    <div id="post-popup" class="hidden">
+        <div class="content">
+            <h1>Create post</h1>
+            <form id="post-creation-form">
+                <textarea id="post-text-input" maxlength="140" placeholder="Post body"></textarea>
+                <label for="file"><br>Optionally upload an image</label>
+                <div class="image-upload">
+                    <input type="file" name="image" accept="image/*" id="post-image-input">
+                    <svg class="transparent-button"><use href="../static/img/sprites.svg#icon-x"></use></svg>
+                </div>
+                <input type="submit" name="post" value="Post" class="post-button"></input>
+            </form>
+            <script>document.getElementById("post-creation-form").reset()</script>
+        </div>
+        <svg class="transparent-button"><use href="../static/img/sprites.svg#icon-x"></use></svg>
+
+        <script>
+            let post_popup = document.getElementById("post-popup")
+            post_popup.addEventListener("click", () => {post_popup.classList.toggle("hidden")})
+            post_popup.querySelector(".content").addEventListener("click", (event) => {event.stopPropagation()})
+
+            let image_upload_div = document.querySelector("#post-popup .content #post-creation-form .image-upload")
+            image_upload_div.lastElementChild.addEventListener("click", () => {
+                image_upload_div.firstElementChild.value = null
+            })
+        </script>
+    </div>
+
     <div id="sidebar">
-        <div class="item transparent-button top-icon" onclick="console.log('top icon')"> <img class="icon" src="../static/img/favicon_128.png" alt="Website icon"></use></svg></div>
-        <div class="item transparent-button active-item" onclick="console.log('home')">  <svg class="icon"><use href="../static/img/sprites.svg#icon-views"></use></svg>Home</div>
-        <div class="item transparent-button" onclick="console.log('chat')">              <svg class="icon"><use href="../static/img/sprites.svg#icon-chat"></use></svg>Chat</div>
-        <div class="item transparent-button" onclick="console.log('profile')">           <svg class="icon"><use href="../static/img/sprites.svg#icon-profile"></use></svg>Profile</div>
-        <div class="item post-button" onclick="console.log('post')">Post</div>
+        <a class="item transparent-button top-icon" href="{{ url_for('timeline') }}"><img class="icon" src="../static/img/favicon_128.png" alt="Website icon"></use></svg></a>
+        <a class="item transparent-button active-item" href="{{ url_for('timeline') }}"><svg class="icon"><use href="../static/img/sprites.svg#icon-views"></use></svg>Home</a>
+        <a class="item transparent-button" href="{{ url_for('timeline') }}"><svg class="icon"><use href="../static/img/sprites.svg#icon-chat"></use></svg>Chat</a>
+        <a class="item transparent-button" href="{{ url_for('timeline') }}"><svg class="icon"><use href="../static/img/sprites.svg#icon-profile"></use></svg>Profile</a>
+        <div class="item post-button" onclick="document.getElementById('post-creation-form').reset() ; document.getElementById('post-popup').classList.toggle('hidden')">Post</div>
     </div>
     <div id="content">
         {% block content %}
         {% endblock %}
     </div>
-
 
 </body>

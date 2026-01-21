@@ -1,0 +1,23 @@
+{% import "components/_post_template.html" as post_template %}
+
+{% macro style() %}
+<link rel="stylesheet", type="text/css", href="{{ url_for('static', filename='styles/components/feed.css') }}">
+{{ post_template.style() }}
+{% endmacro %}
+
+{% macro content(feed_type) %}
+<div id="feed" class="{{'timeline-feed' if feed_type == 'timeline' else ''}}">
+    <div id="image-inspector" class="hidden">
+        <img src="../static/img/testing-wide.png" alt="">
+        <svg class="transparent-button"><use href="../static/img/sprites.svg#icon-x"></use></svg>
+
+        <script>
+            let image_inspector = document.getElementById("image-inspector")
+            image_inspector.addEventListener("click", () => {image_inspector.classList.toggle("hidden")})
+            image_inspector.firstElementChild.addEventListener("click", (event) => {event.stopPropagation()})
+        </script>
+    </div>
+
+    {{ post_template.content() }}
+</div>
+{% endmacro %}

@@ -29,6 +29,10 @@ def chat():
 def chat_conversation(username):
     return render_template("chat_conversation.html")
 
+@app.route("/profile")
+def profile():
+    return render_template("profile.html", display_name="bob", username="super_awesome_bob")
+
 if __name__ == "__main__":
     app.run(debug=True)
 

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% set primary_page = True %}
+{% set page_name = "Profile" %}
+
+{% block title %}Bitter - Profile{% endblock %}
+
+{% block style %}
+<link rel="stylesheet", type="text/css", href="{{ url_for('static', filename='styles/profile.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<img id="pfp" src="../static/img/favicon_128.png" alt="User's profile picture">
+
+<form id="update-profile-form">
+    <label for="pfp">Choose new profile picture</label>
+    <input type="file" name="pfp" accept="image/*" id="pfp-input">
+    <label for="display-name">Choose new display name</label>
+    <input type="text" name="display-name" maxlength="24" id="display-name-input">
+    <label for="username">Usernames can't be changed</label>
+    <input type="text" name="username" placeholder="@{{ username }}" maxlength="24" disabled id="username-input">
+    <input type="submit" name="update" value="Update profile" id="update-profile-button"></input>
+</form>
+<script>
+    document.getElementById("update-profile-form").reset()
+    document.getElementById("display-name-input").value = "{{ display_name }}"
+</script>
+
+{% endblock %}
+

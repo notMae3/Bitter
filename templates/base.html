@@ -6,8 +6,8 @@
     <meta charset="utf-8">
     <meta lang="en">
     
-    <link rel="shortcut icon", type="image/x-icon", href="../static/img/favicon_48.png">
-    <link rel="stylesheet", type="text/css", href="../static/styles/base.css">
+    <link rel="shortcut icon", type="image/x-icon", href="{{ url_for('static', filename='img/favicon_48.png') }}">
+    <link rel="stylesheet", type="text/css", href="{{ url_for('static', filename='styles/base.css') }}">
     {% block style %}
     {% endblock %}
 </head>
@@ -45,7 +45,7 @@
         <a class="item transparent-button top-icon" href="{{ url_for('timeline') }}"><img class="icon" src="../static/img/favicon_128.png" alt="Website icon"></use></svg></a>
         <a class="item transparent-button{{' active-item' if page_name == 'Timeline' else ''}}" href="{{ url_for('timeline') }}"><svg class="icon"><use href="../static/img/sprites.svg#icon-views"></use></svg>Home</a>
         <a class="item transparent-button{{' active-item' if page_name == 'Chat' else ''}}" href="{{ url_for('chat') }}"><svg class="icon"><use href="../static/img/sprites.svg#icon-chat"></use></svg>Chat</a>
-        <a class="item transparent-button{{' active-item' if page_name == 'Profile' else ''}}" href="{{ url_for('timeline') }}"><svg class="icon"><use href="../static/img/sprites.svg#icon-profile"></use></svg>Profile</a>
+        <a class="item transparent-button{{' active-item' if page_name == 'Profile' else ''}}" href="{{ url_for('profile') }}"><svg class="icon"><use href="../static/img/sprites.svg#icon-profile"></use></svg>Profile</a>
         <div class="item post-button" onclick="document.getElementById('post-creation-form').reset() ; document.getElementById('post-popup').classList.toggle('hidden')">Post</div>
     </div>
     <div id="content">

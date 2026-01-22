@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% import "components/_feed.html" as feed %}
 
+{% set feed_type = "timeline" %}
+{% set primary_page = True %}
+{% set page_name = "Timeline" %}
+
 {% block style %}
 {{ feed.style() }}
 {% endblock %}

@@ -1,70 +1,17 @@
 @import "../variables";
 
 .post {
-    display: flex;
-    width: 100%;
-
     // if this post is being displayed in a timeline feed
     &.timeline-feed {
         cursor: pointer;
-
-        // apply a bottom border to all timeline posts but the last one
-        &:not(:last-of-type) {
-            border-bottom: $default-border;
-        }
     }
 
-    >.pfp-strip {
-        min-width: $feed-post-pfp-strip-width;
-        max-width: $feed-post-pfp-strip-width;
-
-        margin: 0 2.5px 0 2.5px;
-
-        >img {
-            width: 100%;
-            object-fit: scale-down;
-            
-            padding: 3px;
-            box-sizing: border-box;
-
-            border-radius: 100%;
-        }
+    // apply a bottom border to all posts but the last one
+    &:not(:last-of-type) {
+        border-bottom: $default-border;
     }
 
     >.content {
-        flex-grow: 1;
-        margin-right: $post-margin-right;
-
-        p {margin: 0;}
-
-        >.user {
-            display: grid;
-            grid-template-columns: auto auto 1fr;
-
-            column-gap: 5px;
-            align-items: end;
-
-            height: $feed-post-pfp-strip-width/2;
-            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-
-            >.display-name {
-                font-size: 18px;
-                color: $font-color;
-            }
-
-            >.username {
-                font-size: 14px;
-                color: $secondary-font-color;
-            }
-
-            >.date-posted {
-                position: absolute;
-                font-size: 14px;
-                color: $secondary-font-color;
-                justify-self: end;
-            }
-        }
-
         >.post-body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             font-size: 16px;

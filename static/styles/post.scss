@@ -6,41 +6,6 @@
     row-gap: 10px;
 }
 
-#post-header {
-    width: 100%;
-    height: $post-header-height;
-
-    padding: 5px;
-    box-sizing: border-box;
-
-    display: flex;
-    align-items: center;
-    column-gap: 10px;
-
-    color: $font-color;
-
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-weight: bold;
-    font-size: 24px;
-
-    >a {
-        height: 100%;
-        aspect-ratio: 1;
-
-        >.icon {
-            color: $font-color;
-
-            height: 100%;
-            aspect-ratio: 1;
-    
-            border-radius: 100%;
-    
-            padding: 5px;
-            box-sizing: border-box;
-        }
-    }
-}
-
 #new-reply-form {
     height: 85px;
 

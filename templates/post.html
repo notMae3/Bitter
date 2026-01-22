@@ -2,6 +2,10 @@
 {% import "components/_feed.html" as feed %}
 {% import "components/_reply_template.html" as reply_template %}
 
+{% set feed_type = "post" %}
+{% set primary_page = False %}
+{% set page_name = "Post" %}
+
 {% block title %}Bitter - Post{% endblock %}
 
 {% block style %}
@@ -11,18 +15,20 @@
 {% endblock %}
 
 {% block content %}
-    <div id="post-header"><a href="{{ referer if referer else url_for('timeline') }}"><svg class="icon transparent-button"><use href="../static/img/sprites.svg#icon-back"></use></svg></a>Post</div>
     {{ feed.content(feed_type) }}
     <form id="new-reply-form">
         <textarea id="reply-text-input" maxlength="140" placeholder="Reply"></textarea>
-        <button type="submit">
+        <button type="submit" title="Post reply">
             <svg class="icon transparent-button"><use href="../static/img/sprites.svg#icon-back"></use></svg>
         </button>
     </form>
     <script>document.getElementById("new-reply-form").reset()</script>
 
     <div id="past-reply-container">
-        {{ reply_template.content() }}
+        {{ reply_template.content(
+            user_header_parent_id = "reply-template",
+            user_header_parent_class = "post" + (" timeline-feed" if feed_type == "timeline" else "")
+        ) }}
     </div>
 {% endblock %}
 

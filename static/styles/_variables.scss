@@ -24,12 +24,15 @@ $content-width: 100% - $sidebar-width*2;
 $content-border-color: $font-color;
 $content-border-width: 1px;
 $default-border: $content-border-width $content-border-color solid;
+$content-header-height: 50px;
 
 // content - feed
 $feed-post-pfp-strip-width: 40px;
 $feed-post-engagement-bar-height: 20px;
 
 // content - post
-$post-header-height: 50px;
 $post-margin-right: 5px;
 $post-reply-row-gap: 20px;
+
+//chat
+$chat-message-received-background-color: #424242;

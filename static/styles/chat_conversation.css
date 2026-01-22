@@ -1,0 +1,124 @@
+#content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: end;
+}
+
+#message-container {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  margin: 15px 5px 15px 5px;
+  overflow: scroll;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  row-gap: 5px;
+}
+
+#message-container > .message {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 16px;
+  color: #c0c0c0;
+}
+
+#message-container > .message > .sent, #message-container > .message > .received {
+  max-width: 60%;
+  height: 100%;
+  border-radius: 24px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+#message-container > .message > .sent > p, #message-container > .message > .received > p {
+  margin: 0;
+  max-width: 100%;
+  height: 100%;
+  word-break: break-all;
+  white-space: normal;
+  margin: 10px;
+}
+
+#message-container > .message > .sent {
+  -ms-flex-item-align: end;
+      align-self: flex-end;
+  background-color: green;
+}
+
+#message-container > .message > .received {
+  -ms-flex-item-align: start;
+      align-self: flex-start;
+  background-color: #424242;
+}
+
+#new-message-form {
+  height: 85px;
+  margin-left: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#new-message-form > #message-text-input {
+  resize: none;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  height: 100%;
+  margin: 0;
+  padding: 8px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  background-color: transparent;
+  color: #c0c0c0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 15px;
+  outline: none;
+  border: 1px #c0c0c0 solid;
+  border-radius: 24px;
+}
+
+#new-message-form > button {
+  background-color: transparent;
+  height: 60%;
+  aspect-ratio: 1;
+  border-radius: 100%;
+  border: 6px;
+  outline: 0;
+}
+
+#new-message-form > button > .icon {
+  color: #c0c0c0;
+  width: 100%;
+  height: 100%;
+  border-radius: 100%;
+  padding: 4px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  -webkit-transform: scaleX(-1);
+          transform: scaleX(-1);
+}
+/*# sourceMappingURL=chat_conversation.css.map */

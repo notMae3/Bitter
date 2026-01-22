@@ -1,0 +1,25 @@
+{% macro style() %}
+<link rel="stylesheet", type="text/css", href="{{ url_for('static', filename='styles/components/user_header.css') }}">
+{% block style %}{% endblock%}
+{% endmacro %}
+
+{% macro content(
+    user_header_include_date_label = True,
+    user_header_single_line = True,
+    user_header_parent_id = "",
+    user_header_parent_class = "")
+%}
+<div id="{{ user_header_parent_id }}" class="{{ user_header_parent_class }}">
+    <div class="pfp-strip">
+        <img src="../static/img/favicon_128.png" alt="User's profile picture">
+    </div>
+    <div class="content">
+        <div class="user{{ ' single-line' if user_header_single_line else '' }}">
+            <p class="display-name">Display name</p>
+            <p class="username">@Username</p>
+            {% if user_header_include_date_label %}<p class="date-posted">2026-01-01 10:10</p>{% endif %}
+        </div>
+        {% block content %}{% endblock %}
+    </div>
+</div>
+{% endmacro %}

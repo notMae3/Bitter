@@ -93,6 +93,43 @@ body {
 
     box-sizing: border-box;
     overflow: scroll;
+
+    >#content-header {
+        width: 100%;
+        height: $content-header-height;
+    
+        padding: 5px;
+        box-sizing: border-box;
+    
+        display: flex;
+        align-items: center;
+        column-gap: 10px;
+    
+        color: $font-color;
+    
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: bold;
+        font-size: 24px;
+
+        &.back-button-disabled {justify-content: center;}
+    
+        >.back-button {
+            height: 100%;
+            aspect-ratio: 1;
+    
+            >.icon {
+                color: $font-color;
+    
+                height: 100%;
+                aspect-ratio: 1;
+        
+                border-radius: 100%;
+        
+                padding: 5px;
+                box-sizing: border-box;
+            }
+        }
+    }
 }
 
 #post-popup {

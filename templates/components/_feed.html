@@ -17,7 +17,11 @@
             image_inspector.firstElementChild.addEventListener("click", (event) => {event.stopPropagation()})
         </script>
     </div>
-
-    {{ post_template.content() }}
+    
+    {{ post_template.content(
+        user_header_parent_id = "post-template",
+        user_header_parent_class = "post" + (" timeline-feed" if feed_type == "timeline" else "")
+    )
+    }}
 </div>
 {% endmacro %}

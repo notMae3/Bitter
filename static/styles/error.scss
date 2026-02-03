@@ -1,0 +1,19 @@
+@import "./variables";
+
+#status-code, #status-str {
+    text-align: center;
+    margin: auto;
+
+    width: 80%;
+}
+
+#status-code {
+    font-size: 52px;
+    font-weight: bold;
+
+    margin-top: 30px;
+}
+
+#status-str {
+    font-size: 20px;
+}

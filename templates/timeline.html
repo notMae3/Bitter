@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% import "components/_feed.html" as feed %}
 
-{% set feed_type = "timeline" %}
+{% set is_timeline = True %}
 {% set primary_page = True %}
 {% set page_name = "Timeline" %}
 
@@ -9,6 +9,13 @@
 {{ feed.style() }}
 {% endblock %}
 
+{% block script %}
+{{ feed.script() }}
+{% endblock %}
+
 {% block content %}
-{{ feed.content(feed_type) }}
+{% for message in get_flashed_messages() %}
+<p class="flash-message">{{message}}</p>
+{% endfor %}
+{{ feed.content(is_timeline, user_is_admin = user_is_admin) }}
 {% endblock %}

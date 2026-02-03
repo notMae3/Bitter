@@ -1,0 +1,20 @@
+{% import "components/_user_header.html" as user_header %}
+
+{% macro style() %}
+<link rel="stylesheet", type="text/css", href="{{ url_for('static', filename='styles/components/conversation.css') }}">
+{{ user_header.style() }}
+{% endmacro %}
+
+{% macro content() %}
+<div id="[conversation-id]" class="conversation" href="{{ url_for('chat', username='[username]') }}">
+    {{ user_header.content(
+        user_header_include_date_label = False,
+        user_header_single_line = False,
+        user_header_parent_class = "conversation-user")
+    }}
+    <div class="open-conversation" title="Open conversation">
+        <svg class="open-icon"><use href="{{ url_for('static', filename='img/sprites.svg') }}#icon-back"></use></svg>
+        <svg class="unseen-icon"><use href="{{ url_for('static', filename='img/sprites.svg') }}#icon-circle"></use></svg>
+    </div>
+</div>
+{% endmacro %}

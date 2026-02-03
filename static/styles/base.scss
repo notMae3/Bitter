@@ -1,24 +1,42 @@
 @import "variables";
 
+* {font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+p,a,h1,div,input,textarea {color: $font-color;}
+svg {color: $icon-color;}
+
+html {
+    scrollbar-width: none
+}
+
 body {
     background-color: $background-color;
     margin: 0;
+
+    display: flex;
+    flex-direction: row;
 }
 
 #sidebar {
-    position: absolute;
+    position: fixed;
+
     height: 100vh;
     width: $sidebar-item-width;
 
     user-select: none;
 
-    margin-left: $sidebar-width - $sidebar-item-width;
+    margin: 0 0 0 $sidebar-width - $sidebar-item-width;
     padding: 10px 10px 0 0;
     box-sizing: border-box;
 
     display: flex;
     flex-direction: column;
     row-gap: $sidebar-item-row-gap;
+
+    &.layout-small {
+        width: $sidebar-width-small;
+        padding-left: 10px;
+        margin-left: 0;
+    }
 
     >.item {
         height: $sidebar-item-height;
@@ -32,11 +50,9 @@ body {
 
         font-family: Verdana, Geneva, Tahoma, sans-serif;
         font-size: 16px;
-        color: $font-color;
 
         // item icon
         >.icon {
-            color: $icon-color;
             width: $sidebar-item-height;
             height: $sidebar-item-height;
             padding: ($sidebar-item-height - $sidebar-item-icon-size)/2;
@@ -65,7 +81,7 @@ body {
 
         &.post-button {
             justify-content: center;
-            background-color: $sidebar-post-button-background-color;
+            background-color: $green-button-background-color;
     
             font-size: 18px;
             font-weight: bold;
@@ -73,26 +89,33 @@ body {
             align-self: normal;
 
             // make the post button change color on hover or press
-            &:hover {background-color: $sidebar-post-button-hover-color;}
-            &:active {background-color: $sidebar-post-button-active-color;}    
+            &:hover {background-color: $green-button-hover-color;}
+            &:active {background-color: $green-button-active-color;}    
 
         }
     }
 }
 
 #content {
-    position: absolute;
-    height: 100vh;
-    width: $content-width;
-    left: $sidebar-width;
+    position: relative;
+    flex-grow: 1;
+    height: 100%;
+    min-height: 100vh;
+    max-width: $content-width;
 
+    margin-left: $sidebar-width;
     padding-bottom: 20px;
 
     border-left: $default-border;
     border-right: $default-border;
 
     box-sizing: border-box;
-    overflow: scroll;
+
+    &.layout-small {
+        max-width: 100%;
+        margin-left: $sidebar-width-small;
+        border-right: none;
+    }
 
     >#content-header {
         width: 100%;
@@ -104,10 +127,8 @@ body {
         display: flex;
         align-items: center;
         column-gap: 10px;
+        flex-shrink: 0;
     
-        color: $font-color;
-    
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         font-weight: bold;
         font-size: 24px;
 
@@ -118,8 +139,6 @@ body {
             aspect-ratio: 1;
     
             >.icon {
-                color: $font-color;
-    
                 height: 100%;
                 aspect-ratio: 1;
         
@@ -156,7 +175,6 @@ body {
         right: 0;
 
         margin: 10px;
-        color: $icon-color;
         border-radius: $border-radius;
     }
 
@@ -171,11 +189,8 @@ body {
         border: $default-border;
         border-radius: $border-radius;
 
-        color: $font-color;
-
         >h1 {
             text-align: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             font-size: 40px;
         }
 
@@ -186,8 +201,6 @@ body {
             display: flex;
             flex-direction: column;
             align-items: center;
-
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         #post-text-input {
@@ -200,9 +213,6 @@ body {
             box-sizing: border-box;
     
             background-color: transparent;
-            color: $font-color;
-    
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             font-size: 15px;
             
             outline: none;
@@ -220,8 +230,9 @@ body {
             display: flex;
             align-items: center;
             
-            >input {
+            #post-image-input {
                 height: min-content;
+                max-width: 350px;
             }
 
             >.transparent-button {
@@ -239,12 +250,11 @@ body {
 
             border: none;
             border-radius: $border-radius;
-            background-color: $sidebar-post-button-background-color;
+            background-color: $green-button-background-color;
     
             font-family: Verdana, Geneva, Tahoma, sans-serif;
             font-size: 18px;
             font-weight: bold;
-            color: $font-color;
 
             margin: 20px 0px 20px 0px;
 
@@ -253,16 +263,86 @@ body {
             align-items: center;
 
             // make the post button change color on hover or press
-            &:hover {background-color: $sidebar-post-button-hover-color;}
-            &:active {background-color: $sidebar-post-button-active-color;}
+            &:hover {background-color: $green-button-hover-color;}
+            &:active {background-color: $green-button-active-color;}
         }
     }
 }
 
 
-.transparent-button {cursor: pointer;}
-.transparent-button:hover {background-color: $button-hover-color;}
-.transparent-button:active {background-color: $button-active-color;}
+.transparent-button {
+    cursor: pointer;
+
+    &:hover {background-color: $button-hover-color;}
+    &:active {background-color: $button-active-color;}
+}
+
+.green-button {
+    cursor: pointer;
+
+    border: none;
+    border-radius: $border-radius;
+    background-color: $green-button-background-color;
+
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    // make the green button change color on hover or press
+    &:hover {background-color: $green-button-hover-color;}
+    &:active {background-color: $green-button-active-color;}
+
+    user-select: none;
+}
+
+.flash-message {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 14px;
+    text-align: center;
+
+    width: 80%;
+    margin: 10px auto 5px auto;
+}
+
+.loading-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    >svg {
+        width: 50%;
+        max-width: 150px;
+        aspect-ratio: 1;
+
+        margin: 15% 0 15% 0;
+
+        animation: spin 1s linear infinite, delayed-fade-in 1s linear forwards;
+    }
+}
+
+.load-content-button {
+    height: 30px;
+    width: 50%;
+
+    flex-shrink: 0;
+
+    margin: 20px auto 5px auto;
+}
 
 .hidden {display: none !important;}
 .pointer-events-off {pointer-events: none !important;}
+
+@keyframes spin {
+    0% {transform: rotate(0deg);}
+    100% {transform: rotate(360deg);}
+}
+
+@keyframes delayed-fade-in {
+    0% {opacity: 0%;}
+    50% {opacity: 0%;}
+    100% {opacity: 100%;}
+}

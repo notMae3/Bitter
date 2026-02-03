@@ -13,12 +13,14 @@
 
     >img {
         width: 100%;
-        object-fit: scale-down;
+        aspect-ratio: 1;
         
         padding: 3px;
         box-sizing: border-box;
 
         border-radius: 100%;
+        object-fit: contain;
+        font-size: 12px;
     }
 
     &~.content {
@@ -32,16 +34,18 @@
             align-items: end;
 
             height: $feed-post-pfp-strip-width/2;
-            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 
             &.single-line {
                 display: grid;
                 grid-template-columns: auto auto 1fr;
             }
 
+            >p {
+                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            }
+
             >.display-name {
                 font-size: 18px;
-                color: $font-color;
             }
 
             >.username {
@@ -49,11 +53,24 @@
                 color: $secondary-font-color;
             }
 
-            >.date-posted {
+            >.meta-container {
                 position: absolute;
-                font-size: 14px;
-                color: $secondary-font-color;
                 justify-self: end;
+                align-self: end;
+                display: flex;
+
+                >.delete-button {
+                    height: 17px;
+                    aspect-ratio: 1;
+                    margin-left: 7px;
+
+                    border-radius: 100%;
+                }
+    
+                >.date-posted {
+                    font-size: 14px;
+                    color: $secondary-font-color;
+                }
             }
         }
     }

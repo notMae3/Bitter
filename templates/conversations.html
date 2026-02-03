@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% import "components/_conversation_template.html" as conversation_template %}
+
+{% set primary_page = True %}
+{% set page_name = "Conversations" %}
+
+{% block title %}Bitter - Conversations{% endblock %}
+
+{% block style %}
+<link rel="stylesheet", type="text/css", href="{{ url_for('static', filename='styles/conversations.css') }}">
+{{ conversation_template.style() }}
+{% endblock %}
+
+{% block script %}
+<script src="{{ url_for('static', filename='scripts/load_content.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div id="new-chat-popup" class="hidden">
+    <div class="content">
+        <h1>New chat</h1>
+        <form id="new-chat-creation-form" action="{{ url_for('create_conversation') }}" method="post">
+            <input type="text" id="new-chat-username-input" name="username" maxlength="{{ username_max_len }}" placeholder="Username"></input>
+            <input type="submit" value="Start chat" class="start-chat-button"></input>
+        </form>
+        <script>document.getElementById("new-chat-creation-form").reset()</script>
+    </div>
+    <svg class="transparent-button"><use href="{{ url_for('static', filename='img/sprites.svg') }}#icon-x"></use></svg>
+
+    <script>
+        let new_chat_popup = document.getElementById("new-chat-popup")
+        new_chat_popup.addEventListener("click", () => {new_chat_popup.classList.toggle("hidden")})
+        new_chat_popup.querySelector(".content").addEventListener("click", (event) => {event.stopPropagation()})
+    </script>
+</div>
+
+<svg id="new-chat-button" class="transparent-button" title="New chat"><use href="{{ url_for('static', filename='img/sprites.svg') }}#icon-x"></use></svg>
+
+{% for message in get_flashed_messages() %}
+<p class="flash-message">{{message}}</p>
+{% endfor %}
+
+<div id="conversation-parent"></div>
+
+<div id="load-conversations" class="load-content-button green-button hidden">Load more</div>
+
+<div class="loading-icon"><svg><use href="{{ url_for('static', filename='img/sprites.svg') }}#icon-loading"></svg></div>
+
+{% set conversation_template_html = conversation_template.content() %}
+
+<script>
+    document.getElementById("new-chat-button").addEventListener("click", () => {
+        document.getElementById("new-chat-creation-form").reset()
+        document.getElementById("new-chat-popup").classList.toggle("hidden")
+    })
+
+    function open_conversation(username) {
+        window.location = `{{ url_for("chat") }}/${username}`
+    }
+
+    function load_conversations() {
+        // load new conversations and update cursor position
+        let conversation_parent = document.getElementById("conversation-parent")
+        let conversation_fetch_url = `{{ url_for("fetch_conversations") }}?cursor=`
+        return load(
+            conversation_fetch_url + conversation_cursor_position,
+            "conversation",
+            conversation_parent,
+            `{{ conversation_template_html }}`
+        ).then((last_conversation) => {
+            document.querySelector(".loading-icon").classList.add("hidden")
+
+            // set conversation cursor position to the conversation id of the last loaded conversation
+            if (last_conversation) {
+                conversation_cursor_position = last_conversation.conversation_id
+            }
+
+            // theres no more to load or nothing was loaded
+            let no_more_to_load = last_conversation && last_conversation.conversation_idx === 1
+            if ( no_more_to_load || conversation_cursor_position === 0 ) {
+                document.getElementById("load-conversations").classList.add("hidden")
+            }
+            // theres more to load
+            else {
+                document.getElementById("load-conversations").classList.remove("hidden")
+            }
+        })
+    }
+
+    let conversation_cursor_position = 0
+
+    document.getElementById("load-conversations").addEventListener("click", () => {
+        document.querySelectorAll(".flash-message").forEach(
+            (element) => element.remove()
+        )
+        load_conversations()
+    })
+    
+    load_conversations()
+</script>
+{% endblock %}
+

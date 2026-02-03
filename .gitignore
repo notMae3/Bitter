@@ -1,3 +1,8 @@
+# Custom
+uploads/post_images/*
+uploads/user_pfps/*
+logs/*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

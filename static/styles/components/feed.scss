@@ -1,19 +1,16 @@
 @import "../variables";
 
-#content {
-    scrollbar-width: none;
-}
-
 #feed {
     display: flex;
     flex-direction: column;
     row-gap: 10px;
 }
 
-
 #image-inspector {
     background-color: $popup-background-color;
     z-index: 1;
+    
+    cursor: pointer;
     user-select: none;
 
     position: fixed;
@@ -22,18 +19,20 @@
     left: 0;
     top: 0;
 
-    cursor: pointer;
-
     display: flex;
     align-items: center;
     justify-content: center;
 
     >img {
         cursor: default;
-        object-fit: scale-down;
+        pointer-events: none;
+        object-fit: contain;
 
         max-width: 70%;
         max-height: 80%;
+
+        flex-grow: 1;
+        text-align: center;
     }
 
     >.transparent-button {
@@ -44,7 +43,6 @@
         right: 0;
 
         margin: 10px;
-        color: $icon-color;
         border-radius: $border-radius;
     }
 }

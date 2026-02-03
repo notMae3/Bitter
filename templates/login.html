@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<head>
+    <title>{% block title %}Bitter{% endblock %}</title>
+    
+    <meta charset="utf-8">
+    <meta lang="en">
+    
+    <link rel="shortcut icon", type="image/x-icon", href="{{ url_for('static', filename='img/favicon_48.png') }}">
+    <link rel="stylesheet", type="text/css", href="{{ url_for('static', filename='styles/login.css') }}">
+</head>
+
+<body>
+    <img id="top-icon" src="../static/img/favicon_128.png" alt="Website icon"></use></svg>
+    <div id="login-parent">
+        <h1>Login</h1>
+        <form id="login-form" action="{{ url_for('login') }}" method="post">
+            <input type="text" name="username" id="username-input" maxlength="{{ username_max_len }}" placeholder="Username">
+            <input type="password" name="password" id="password-input" maxlength="{{ password_max_len }}" placeholder="Password">
+            <input type="submit" value="Login" id="submit-button"></input>
+        </form>
+        <div id="goto-signup-form">No account? Sign-up</div>
+    </div>
+    <div id="signup-parent" class="hidden">
+        <h1>Create account</h1>
+        <form id="signup-form" action="{{ url_for('signup') }}" method="post">
+            <input type="text" name="display-name" id="display-name-input" maxlength="{{ display_name_max_len }}" placeholder="Display name">
+            <input type="text" name="username" id="username-input" maxlength="{{ username_max_len }}" placeholder="Username">
+            <input type="email" name="email" id="email-input" maxlength="{{ email_max_len }}" placeholder="Email address">
+            <input type="password" name="password" id="password-input" maxlength="{{ password_max_len }}" placeholder="Password">
+            <input type="submit" value="Create account" id="submit-button"></input>
+        </form>
+        <div id="goto-login-form">Already have an account? Login</div>
+    </div>
+
+    {% for message in get_flashed_messages() %}
+    <p class="flash-message">{{message}}</p>
+    {% endfor %}
+
+    <script>
+        let login_form = document.getElementById("login-form") ; login_form.reset()
+        let signup_form = document.getElementById("signup-form") ; signup_form.reset()
+        
+        let login_parent = document.getElementById("login-parent")
+        let signup_parent = document.getElementById("signup-parent")
+        
+        let flip_form_visibility_func = () => {
+            login_parent.classList.toggle("hidden")
+            signup_parent.classList.toggle("hidden")
+        }
+        
+        document.getElementById("goto-signup-form")
+            .addEventListener("click", flip_form_visibility_func)
+        document.getElementById("goto-login-form")
+            .addEventListener("click", flip_form_visibility_func)
+    </script>
+</body>

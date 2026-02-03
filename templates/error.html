@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% set primary_page = True %}
+{% set page_name = "Error" %}
+
+{% block style %}
+<link rel="stylesheet", type="text/css", href="{{ url_for('static', filename='styles/error.css') }}">
+{% endblock %}
+
+{% block content %}
+{% for message in get_flashed_messages() %}
+<p class="flash-message">{{message}}</p>
+{% endfor %}
+
+<p id="status-code">{{ status_code }}</p>
+<p id="status-str">{{ status_str }}</p>
+{% endblock %}

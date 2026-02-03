@@ -3,22 +3,10 @@
 {% set template_type = "post" %}
 
 {% block post_exclusive %}
-<div class="img-container"><div class="click-through-preventer"></div><img src="../static/img/testing-wide.png" alt=""></div>
+<div class="img-container"><img src="{{ url_for('uploads', category='post_images') }}/[post-id].png" alt=""></div>
 <div class="engagement-strip">
-    <div><svg class="icon"><use href="../static/img/sprites.svg#icon-reply"></use></svg>999 999</div>
-    <div><svg class="icon transparent-button"><use href="../static/img/sprites.svg#icon-heart"></use></svg>0</div>
-    <div><svg class="icon"><use href="../static/img/sprites.svg#icon-views"></use></svg>9</div>
+    <div class="reply-parent"><svg class="icon"><use href="{{ url_for('static', filename='img/sprites.svg') }}#icon-reply"></use></svg><p class="reply-count">[reply-count]</p></div>
+    <div class="like-parent"><svg class="icon transparent-button"><use href="{{ url_for('static', filename='img/sprites.svg') }}#icon-heart"></use></svg><p class="like-count">[like-count]</p></div>
+    <div class="view-parent"><svg class="icon"><use href="{{ url_for('static', filename='img/sprites.svg') }}#icon-views"></use></svg><p class="view-count">[view-count]</p></div>
 </div>
 {% endblock %}
-
-<!--* This is meant to be ran after the creation of each individual post
-<script>
-    let posts = document.querySelectorAll(".post")
-    posts.forEach(post => {
-        post.addEventListener("click", () => {console.log("post click")})
-        post.querySelector(".img-container")
-            .addEventListener("click", (event) => {document.getElementById("image-inspector").classList.toggle("hidden") ; event.stopPropagation()})
-        post.querySelector(".engagement-strip :nth-child(2)") // like button
-            .addEventListener("click", (event) => {console.log("like click") ; event.stopPropagation()})
-    })
-</script> -->

@@ -2,7 +2,7 @@
 {% import "components/_feed.html" as feed %}
 {% import "components/_reply_template.html" as reply_template %}
 
-{% set feed_type = "post" %}
+{% set is_timeline = False %}
 {% set primary_page = False %}
 {% set page_name = "Post" %}
 
@@ -14,21 +14,79 @@
 <!-- reply_template.style() is not called since its dependencies are included in feed.style() -->
 {% endblock %}
 
+{% block script %}
+{{ feed.script() }}
+{% endblock %}
+
 {% block content %}
-    {{ feed.content(feed_type) }}
-    <form id="new-reply-form">
-        <textarea id="reply-text-input" maxlength="140" placeholder="Reply"></textarea>
+    {% for message in get_flashed_messages() %}
+    <p class="flash-message">{{message}}</p>
+    {% endfor %}
+
+    {{ feed.content(is_timeline = is_timeline, single_post_id = post_id, user_is_admin = user_is_admin) }}
+    <form id="new-reply-form" action="{{ url_for('create_reply') }}" method="post" class="hidden">
+        <textarea id="reply-text-input" name="reply-body" maxlength="{{ reply_body_max_len }}" placeholder="Reply"></textarea>
+        <input id="parent-post-id-input" class="hidden" name="parent-post-id" value="{{ post_id }}"></input>
         <button type="submit" title="Post reply">
-            <svg class="icon transparent-button"><use href="../static/img/sprites.svg#icon-back"></use></svg>
+            <svg class="icon transparent-button"><use href="{{ url_for('static', filename='img/sprites.svg') }}#icon-back"></use></svg>
         </button>
     </form>
     <script>document.getElementById("new-reply-form").reset()</script>
 
-    <div id="past-reply-container">
-        {{ reply_template.content(
-            user_header_parent_id = "reply-template",
-            user_header_parent_class = "post" + (" timeline-feed" if feed_type == "timeline" else "")
-        ) }}
-    </div>
+    <div id="loading-icon-replies" class="loading-icon"><svg><use href="{{ url_for('static', filename='img/sprites.svg') }}#icon-loading"></svg></div>
+
+    <div id="past-reply-container"></div>
+
+    <div id="load-replies-button" class="load-content-button green-button hidden">Load more</div>
+
+    {% set reply_template_html = reply_template.content(
+        user_header_parent_id = "[reply-element-id]",
+        user_header_parent_class = "reply" + (" timeline-feed" if is_timeline else ""),
+        user_is_admin = user_is_admin
+    ) %}
+
+    <script>
+        function load_replies() {
+            // load new replies and update cursor position
+            let reply_parent = document.getElementById("past-reply-container")
+            let reply_fetch_url = `{{ url_for("fetch_replies", post_id = post_id) }}&cursor=`
+            return load(
+                reply_fetch_url + reply_cursor_position,
+                "reply",
+                reply_parent,
+                `{{ reply_template_html }}`
+            ).then((last_reply) => {
+                document.getElementById("loading-icon-replies").classList.add("hidden")
+
+                if (last_reply) {
+                    reply_cursor_position = last_reply.reply_id
+                }
+
+                // theres no more to load or nothing was loaded
+                let no_more_to_load = last_reply && last_reply.reply_idx === 1
+                if ( no_more_to_load || reply_cursor_position === 0 ) {
+                    document.getElementById("load-replies-button").classList.add("hidden")
+                }
+                // theres more to load
+                else {
+                    document.getElementById("load-replies-button").classList.remove("hidden")
+                }
+            })
+        }
+
+        let delete_reply_url = `{{ url_for('delete_reply') }}?reply_id=`
+        let reply_cursor_position = 0
+
+        document.getElementById("load-replies-button").addEventListener("click", () => {
+            document.querySelectorAll(".flash-message").forEach(
+                element => element.remove()
+            )
+            load_replies()
+        })
+        
+        load_replies().then(() => {
+            document.getElementById("new-reply-form").classList.remove("hidden")
+        })
+    </script>
 {% endblock %}
 

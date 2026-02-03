@@ -13,10 +13,11 @@
     border: $default-border;
     border-radius: 100%;
 
+    margin-top: 25px;
     padding: 5px;
     box-sizing: border-box;
 
-    margin-top: 25px;
+    object-fit: contain;
 }
 
 #update-profile-form {
@@ -24,9 +25,6 @@
     flex-direction: column;
 
     width: 70%;
-
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: $font-color;
 
     >label {
         width: 100%;
@@ -47,38 +45,22 @@
         box-sizing: border-box;
 
         background-color: transparent;
-        color: $font-color;
-
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         font-size: 15px;
         
         outline: none;
         border: $default-border;
         border-radius: $border-radius;
     }
+}
 
-    >#update-profile-button {
-        margin-top: 20px;
+#signout-button {
+    width: 55%;
+    height: 40px;
 
-        height: 60px;
+    margin-bottom: 10px;
+}
 
-        cursor: pointer;
-
-        border: none;
-        border-radius: $border-radius;
-        background-color: $sidebar-post-button-background-color;
-
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-        font-size: 18px;
-        font-weight: bold;
-        color: $font-color;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        // make the post button change color on hover or press
-        &:hover {background-color: $sidebar-post-button-hover-color;}
-        &:active {background-color: $sidebar-post-button-active-color;}
-    }
+.green-button {
+    margin-top: 20px;
+    height: 60px;
 }

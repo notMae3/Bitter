@@ -1,6 +1,12 @@
 @import "../variables";
 
-.post {
+.post, .reply {
+    padding-bottom: $post-reply-half-margin;
+
+    &:not(:first-of-type) {
+        padding-top: $post-reply-half-margin;
+    }
+
     // if this post is being displayed in a timeline feed
     &.timeline-feed {
         cursor: pointer;
@@ -12,11 +18,7 @@
     }
 
     >.content {
-        >.post-body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 16px;
-            color: $font-color;
-        }
+        >.body {font-size: 16px;}
 
         >.img-container {
             position: relative;
@@ -30,6 +32,7 @@
             overflow: hidden;
 
             pointer-events: all;
+            cursor: pointer;
 
             border-radius: $border-radius;
             border: $default-border;
@@ -41,13 +44,6 @@
 
                 user-select: none;
             }
-
-            >.click-through-preventer {
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                background-color: $background-color;
-            }
         }
 
         >.engagement-strip {
@@ -58,12 +54,14 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
 
+            >.active {
+                color: $post-like-color;
+            }
+
             >div {
                 display: flex;
                 align-items: center;
                 height: $feed-post-engagement-bar-height;
-
-                color: $font-color;
 
                 >.icon {
                     max-height: 100%;

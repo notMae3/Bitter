@@ -1,52 +1,88 @@
 {% extends "base.html" %}
 {% import "components/_user_header.html" as user_header %}
+{% import "components/_message_template.html" as message_template %}
 
-{% set primary_page = True %}
-{% set page_name = "Chat" %}
+{% set primary_page = False %}
+{% set page_name = "Conversation" %}
+{% set referer = url_for("chat") %}
 
 {% block title %}Bitter - Chat{% endblock %}
 
 {% block style %}
 <link rel="stylesheet", type="text/css", href="{{ url_for('static', filename='styles/chat.css') }}">
+{{ message_template.style() }}
 {{ user_header.style() }}
 {% endblock %}
 
-{% block content %}
-<div id="new-chat-popup" class="hidden">
-    <div class="content">
-        <h1>New chat</h1>
-        <form id="new-chat-creation-form">
-            <input type="text" id="new-chat-username-input" maxlength="24" placeholder="Username"></input>
-            <input type="submit" name="post" value="Start chat" class="start-chat-button"></input>
-        </form>
-        <script>document.getElementById("new-chat-creation-form").reset()</script>
-    </div>
-    <svg class="transparent-button"><use href="../static/img/sprites.svg#icon-x"></use></svg>
+{% block script %}
+<script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+<script src="{{ url_for('static', filename='scripts/chat_manager.js') }}"></script>
+{% endblock %}
 
-    <script>
-        let new_chat_popup = document.getElementById("new-chat-popup")
-        new_chat_popup.addEventListener("click", () => {new_chat_popup.classList.toggle("hidden")})
-        new_chat_popup.querySelector(".content").addEventListener("click", (event) => {event.stopPropagation()})
-    </script>
+{% block content %}
+
+{% set user_header_template = user_header.content(
+    user_header_include_date_label = False,
+    user_header_single_line = False,
+    user_header_parent_id = "user-header"
+) %}
+
+<div class="loading-icon"><svg><use href="{{ url_for('static', filename='img/sprites.svg') }}#icon-loading"></svg></div>
+
+<div id="message-container">
+    <div id="load-messages-button" class="load-content-button green-button hidden">Load more</div>
 </div>
 
-<svg id="new-chat-button" class="transparent-button" title="New chat"><use href="../static/img/sprites.svg#icon-x"></use></svg>
+<form id="new-message-form">
+    <textarea id="message-text-input" name = "message-body" maxlength="{{ message_body_max_len }}" placeholder="Message"></textarea>
+    <button type="submit" title="Send message">
+        <svg class="icon transparent-button"><use href="{{ url_for('static', filename='img/sprites.svg') }}#icon-back"></use></svg>
+    </button>
+</form>
 
-<a id="chat-template" class="chat" href="{{ url_for('chat_conversation', username='erar') }}">
-    {{ user_header.content(
-        user_header_include_date_label = False,
-        user_header_single_line = False,
-        user_header_parent_class = "chat-user")
-    }}
-    <svg class="open-chat" title="Open chat"><use href="../static/img/sprites.svg#icon-back"></use></svg>
-</a>
+{% for message in get_flashed_messages() %}
+<p class="flash-message">{{message}}</p>
+{% endfor %}
+
+
+{% set message_template_html = message_template.content() %}
 
 <script>
-    document.getElementById("new-chat-button").addEventListener("click", () => {
-        document.getElementById("new-chat-creation-form").reset()
-        document.getElementById("new-chat-username-input").select()
-        document.getElementById("new-chat-popup").classList.toggle("hidden")
+    let message_form = document.getElementById("new-message-form")
+    message_form.reset()
+    message_form.addEventListener("submit", (event) => {
+        event.preventDefault()
+
+        document.querySelectorAll(".flash-message").forEach(element => {
+            element.remove()
+        })
+
+        let form_data = new FormData(message_form)
+        let message_body = form_data.get("message-body")
+
+        if (message_body) {
+            send_message(message_body)
+            message_form.reset()
+        }
     })
+
+    let message_cursor_position = 0
+
+    let message_container = document.getElementById("message-container")
+    let loading_icon = document.querySelector(".loading-icon")
+
+    let load_messages_button = document.getElementById("load-messages-button")
+    load_messages_button.addEventListener("click", request_messages)
+
+    let fetch_user_info_base_url = `{{ url_for('fetch_profile_from_username') }}?username=`
+    let timeline_url = `{{ url_for('timeline') }}`
+    let user_header_template = `{{ user_header_template }}`
+    let message_template = `{{ message_template_html }}`
+
+    request_user_info()
+    request_messages()
+    register_for_realtime()
 </script>
+
 {% endblock %}
 

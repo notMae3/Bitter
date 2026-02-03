@@ -1,0 +1,139 @@
+@import "variables";
+
+#new-chat-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    height: $content-header-height * 0.8;
+    aspect-ratio: 1;
+
+    border-radius: 100%;
+    margin: $content-header-height * 0.1;
+
+    padding: 5px;
+    box-sizing: border-box;
+
+    // rotate the x icon 45deg to a +
+    >use {
+        transform-origin: 50% 50%;
+        transform: rotateZ(45deg);
+    }
+}
+
+#new-chat-popup {
+    background-color: $popup-background-color;
+    z-index: 1;
+
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    >.transparent-button {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        top: 0;
+        right: 0;
+
+        margin: 10px;
+        border-radius: $border-radius;
+    }
+
+    >.content {
+        cursor: default;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        background-color: $background-color;
+        border: $default-border;
+        border-radius: $border-radius;
+
+        >h1 {
+            text-align: center;
+            font-size: 40px;
+        }
+
+        >#new-chat-creation-form {
+            min-width: 500px;
+
+            border-radius: $border-radius;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #new-chat-username-input {
+            resize: none;
+            
+            width: 80%;
+            height: 40px;
+
+            padding: 8px;
+            box-sizing: border-box;
+    
+            background-color: transparent;
+            font-size: 15px;
+            
+            outline: none;
+            border: $default-border;
+            border-radius: $border-radius;
+        }
+
+        >#new-chat-creation-form > div {
+            height: 40px;
+
+            border: $default-border;
+            border-radius: $border-radius;
+            padding: 10px;
+
+            display: flex;
+            align-items: center;
+            
+            >input {
+                height: min-content;
+            }
+
+            >.transparent-button {
+                height: 100%;
+                aspect-ratio: 1;
+                border-radius: 100%;
+            }
+        }
+
+        .start-chat-button {
+            width: 40%;
+            height: 60px;
+
+            cursor: pointer;
+
+            border: none;
+            border-radius: $border-radius;
+            background-color: $green-button-background-color;
+    
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+
+            margin: 20px 0px 20px 0px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            // make the post button change color on hover or press
+            &:hover {background-color: $green-button-hover-color;}
+            &:active {background-color: $green-button-active-color;}
+        }
+    }
+}

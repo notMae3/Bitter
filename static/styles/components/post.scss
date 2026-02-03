@@ -51,12 +51,12 @@
             width: 80%;
             margin: 0px auto $post-margin-right auto;
 
+            user-select: none;
+
             display: grid;
             grid-template-columns: repeat(3, 1fr);
 
-            >.active {
-                color: $post-like-color;
-            }
+            >.active >* {color: $post-like-color;}
 
             >div {
                 display: flex;

@@ -43,6 +43,12 @@
             let like_parent = document.querySelector(`#post-${post_id} .like-parent`)
             let action = like_parent.classList.contains("active") ? "dislike" : "like"
 
+            if (like_parent.classList.contains("disabled")) {
+                return
+            }
+
+            console.log(action + " " + post_id)
+
             like_parent.classList.toggle("active")
 
             // update like label
@@ -51,28 +57,39 @@
             let client_like_count_change = action === "like" ? 1 : -1
             like_p.innerHTML = old_like_count + client_like_count_change
 
+            // disable the like button for some time to prevent spamming
+            like_parent.classList.add("disabled")
+            new Promise(resolve => setTimeout(resolve, 400))
+                .then(() => like_parent.classList.remove("disabled"))
+
+            // tell the server about the like or unlike
             fetch(action === "like" ? like_post_url : unlike_post_url, {
                 method: "POST",
                 body: JSON.stringify({"post_id": post_id}),
                 headers: {"Content-Type": "application/json"}
-            }).then(resp => {
-                let is_json = resp.headers.get('Content-Type') === "application/json"
-                return Promise.all([is_json ? resp.json() : resp.text(), resp.ok])
-            }).then((resp_data) => {
-                resp_content = resp_data[0]
-                ok = resp_data[1]
-
-                if (!ok) {
-                    console.log(resp_content)
-
-                    // undo the like in 150 ms to show the user something went wrong
-                    new Promise(resolve => setTimeout(resolve, 150))
-                        .then(() => {
-                            like_parent.classList.toggle("active")
-                            like_p.innerHTML = old_like_count
-                        })
-                }
             })
+                .then(resp => {
+                    let is_json = resp.headers.get('Content-Type') === "application/json"
+                    return Promise.all([is_json ? resp.json() : resp.text(), resp])
+                })
+                .then((resp_data) => {
+                    resp_content = resp_data[0]
+                    resp = resp_data[1]
+
+                    if (!resp.ok) {console.log(resp_content)}
+
+                    // undo the like in 150 ms to tell the user that something
+                    // went wrong as long as the error wasn't a conflict error.
+                    // conflict error means that the user had already liked this
+                    // post
+                    if (!resp.ok && resp.status !== 409) {
+                        new Promise(resolve => setTimeout(resolve, 150))
+                            .then(() => {
+                                like_parent.classList.toggle("active")
+                                like_p.innerHTML = old_like_count
+                            })
+                    }
+                })
         }
 
         function open_post(post_id) {

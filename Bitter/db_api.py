@@ -762,12 +762,12 @@ def like_post() -> Response:
         return Response(f"Post '{post_id}' doesn't exist", 404, mimetype="text/plain")
     
     if db_result.get("like_exists"):
-        return Response("User already liked this post", 409, mimetype="text/plain")
+        return Response(f"User already liked post '{post_id}'", 409, mimetype="text/plain")
     
     # update db
     db_exec_multiple(
-        # add a row to the likes table and ignore the error raised if this user
-        # had already liked this post or if the post doesnt exist
+        # add a row to the likes table and for the currently logged in user and
+        # the inputted post id
         f"""
         INSERT INTO likes (post_id, user_id, date_created) 
         VALUES ({post_id}, {user_id}, {date_created})

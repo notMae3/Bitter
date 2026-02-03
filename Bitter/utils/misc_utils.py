@@ -132,7 +132,7 @@ def format_logging_info(response = None, status_code = int) -> str:
             "method": request.method,
             "args": request.args.to_dict(),
             "form": request.form.to_dict(),
-            "files": request.files.to_dict(),
+            "files": list(request.files.to_dict().keys()),
             "body": request.get_data(as_text = True),
         }
     }

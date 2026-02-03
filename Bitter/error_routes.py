@@ -4,13 +4,14 @@ from .utils.misc_utils import (
     format_logging_info,
     DatabaseException
 )
-from flask import redirect, url_for, request, Response
+from flask import redirect, url_for, flash
 from werkzeug.exceptions import HTTPException
 import traceback
 
 @app.errorhandler(DatabaseException)
 def on_database_error(error : DatabaseException):
     app.logger.error(format_logging_info(status_code = error.code))
+    flash("Error - Database error")
     return redirect(url_for("timeline"))
 
 @app.errorhandler(HTTPException)
@@ -36,4 +37,6 @@ def on_exception(error : Exception):
     error_str = traceback.format_exc().encode('unicode_escape').decode("utf-8")
     app.logger.critical(error_str)
     
+    flash("Error - A critical system error has occured. Sorry about that.")
+
     return redirect(url_for("timeline"))

@@ -5,15 +5,15 @@ A fully functional and slightly watered-down twitter-like website made for a sch
 Once a user logs in they receive an access token which allows them to make requests to protected routes. This access token is automatically renewed every time the user visits one of the main pages. The access token expires some time after the last time the user visited the website, meaning if you're a frequent visitor you don't have to log back in.
 
 ## Useful files
-* All API documentation can be found in ```./DOCS.md```
-* General config can be found in ```./Bitter/config.py```
-* Some pre-made demo data can be found in ```./Bitter-demo.sql```. The "admin" account uses password "pass123" and "bobo" uses password "BobsSuperSecretPassword".
+* All API documentation can be found in [./DOCS.md](./DOCS.md)
+* General config can be found in [./Bitter/config.py](./Bitter/config.py)
+* Some pre-made demo data can be found in [./Bitter-demo.sql](./Bitter-demo.sql). The "admin" account uses password "pass123" and "bobo" uses password "BobsSuperSecretPassword".
 
 ## Dependencies
 * MariaDB: 10.4.32
-* See ```./requirements.txt```
+* See [./requirements.txt](./requirements.txt)
 
-## ```./.env``` structure
+## [./.env](./.env) structure
 <table>
   <tr>
     <th>Value key</th>

@@ -1,5 +1,5 @@
 # Bitter
-A fully functional and slightly watered-down twitter-like website made for a school assignment. Features most of the functionality you'd expect to see on twitter— that is: posting, liking, replying and real-time chatting. Made using Flask, Jinja, MySQL, MariaDB and SocketIO.
+A fully functional and slightly watered-down twitter-like website made for a school assignment. Features most of the functionality you'd expect to see on twitter— that is: posting, liking, replying and real-time chatting. Made using Flask, Jinja, MariaDB and SocketIO.
 
 ## Stay-logged-in philosophy
 Once a user logs in they receive an access token which allows them to make requests to protected routes. This access token is automatically renewed every time the user visits one of the main pages. The access token expires some time after the last time the user visited the website, meaning if you're a frequent visitor you don't have to log back in.

@@ -54,15 +54,16 @@ Once a user logs in they receive an access token which allows them to make reque
 
 ##
 
-> [!WARNING] Known issues
-> 1. ```@login_required``` checks if a user_id exists in client-side cookies, which means if said user_id belongs to a deleted 
+> [!NOTE]
+This project doesn't have a cookie-disclaimer banner, which likely isn't compliant with cookie consent laws. That said, the only cookies used by this project are for storing login information and CSRF tokens.
+
+
+## Known issues
+1. ```@login_required``` checks if a user_id exists in client-side cookies, which means if said user_id belongs to a deleted 
 user the request passes as logged in. This happens when client-side cookies are outdated after resetting the 
 db. This could be fixed with a db query every time a login_required is used, but that seems excessive for a mostly 
 non-issue.
 
-> [!NOTE] Cookies
-This project doesn't have a cookie-disclaimer banner, which likely isn't compliant with cookie consent laws. That said, the only cookies used by this project are for storing login information.
 
-
-> [!NOTE] Further improvements
+## Further improvements
 Naturally there's more performance optimizations to be made, however most of these would only matter for a large scale platform. If this project ever became a large scale platform I imagine there would be greater concerns than something like packaging and serializing data, as opposed to sending JSON, when fetching posts.

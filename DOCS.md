@@ -19,59 +19,59 @@
 
 # API documentation
 
-> [!NOTE] [content]-idx
+## [content]-idx
 Certain application/json responses and socket API events contain an integer called [content]-idx. This index is relative to all items of this content type that are available in the current context.\
 For example: If a client fetches replies for a certain post, and the reply-idx of the last reply in the response is 4, then the client knows there are 4 more replies available to load.
 
 ## REST API
 
-> [!NOTE] User authentication
+## User authentication
 All routes with user authentication expects a JWT access token to be present in the cookie-header of the request.\
 <code>Admin</code> authentication checks wether the current user is an admin in addition to the check that <code>Logged-in</code> performs.
-> <table>
->  <tr>
->    <td><code>Logged-in</code></td>
->    <td>
->      <table class="response-table">
->        <tr> <td>If authentication fails:</td><td>[401] [application/json] {"errors": <i>list[str]</i>}</td> </tr>
->        <tr> <td>If authentication succeeds:</td><td>Whatever the protected path produces</td> </tr>
->      </table>
->    </td>
->  </tr>
->  <tr>
->    <td><code>Admin</code></td>
->    <td>
->      <table class="response-table">
->        <tr> <td>If authentication fails:</td><td>[401] [application/json] {"errors": <i>list[str]</i>}</td> </tr>
->        <tr> <td>If authentication succeeds:</td><td>Whatever the protected path produces</td> </tr>
->      </table>
->    </td>
->  </tr>
-> </table>
+<table>
+ <tr>
+   <td><code>Logged-in</code></td>
+   <td>
+     <table class="response-table">
+       <tr> <td>If authentication fails:</td><td>[401] [application/json] {"errors": <i>list[str]</i>}</td> </tr>
+       <tr> <td>If authentication succeeds:</td><td>Whatever the protected path produces</td> </tr>
+     </table>
+   </td>
+ </tr>
+ <tr>
+   <td><code>Admin</code></td>
+   <td>
+     <table class="response-table">
+       <tr> <td>If authentication fails:</td><td>[401] [application/json] {"errors": <i>list[str]</i>}</td> </tr>
+       <tr> <td>If authentication succeeds:</td><td>Whatever the protected path produces</td> </tr>
+     </table>
+   </td>
+ </tr>
+</table>
 
-> [!NOTE] Cross Site Request Forgery (CSRF)
+## Cross Site Request Forgery (CSRF)
 All non-<code>GET</code> API routes expect a csrf_token to be present in the request content.\
 This token is automatically generated and included in the forms present in HTML pages produced by non-API routes.
-> <table class="response-table">
->   <tr> <td>If csrf_token is missing or malformed:</td><td>[400] [application/json] {"errors": [ <i>"errors": <i>list[str]</i></i> ]}</td> </tr>
->   <tr> <td>If authentication succeeds:</td><td>Whatever the protected path produces</td> </tr>
-> </table>
+<table class="response-table">
+  <tr> <td>If csrf_token is missing or malformed:</td><td>[400] [application/json] {"errors": [ <i>"errors": <i>list[str]</i></i> ]}</td> </tr>
+  <tr> <td>If authentication succeeds:</td><td>Whatever the protected path produces</td> </tr>
+</table>
 
-> [!NOTE] Errors
-> <table class="response-table">
->   <tr>
->     <td>Database error:</td>
->     <td>[503] [application/json] {"errors": <i>list[str]</i>}</td>
->   </tr>
->   <tr>
->     <td>General HTTP error:</td>
->     <td>[code] [application/json] {"errors": <i>list[str]</i>}</td>
->   </tr>
->   <tr>
->     <td>Critical system error:</td>
->     <td>[500] [application/json] {"errors": <i>list[str]</i>}</td>
->   </tr>
-> </table>
+## Errors
+<table class="response-table">
+  <tr>
+    <td>Database error:</td>
+    <td>[503] [application/json] {"errors": <i>list[str]</i>}</td>
+  </tr>
+  <tr>
+    <td>General HTTP error:</td>
+    <td>[code] [application/json] {"errors": <i>list[str]</i>}</td>
+  </tr>
+  <tr>
+    <td>Critical system error:</td>
+    <td>[500] [application/json] {"errors": <i>list[str]</i>}</td>
+  </tr>
+</table>
 
 <table>
   <tr>
@@ -368,41 +368,41 @@ This token is automatically generated and included in the forms present in HTML 
 
 ## Socket API
 
-> [!NOTE] User authentication
-> All events with user authentication expects a JWT access token to be present in the cookie-header of the request.\
-> <code>Admin</code> authentication checks wether the current user is an admin in addition to the check that <code>Logged-in</code> performs.
-> <table>
->  <tr>
->    <td><code>Logged-in</code></td>
->    <td>
->      <table class="response-table">
->        <tr> <td>If authentication fails:</td><td><i>Emits "error_response"</i></td> </tr>
->        <tr> <td>If authentication succeeds:</td><td>Whatever the protected event produces</td> </tr>
->      </table>
->    </td>
->  </tr>
->  <tr>
->    <td><code>Admin</code></td>
->    <td>
->      <table class="response-table">
->        <tr> <td>If authentication fails:</td><td><i>Emits "error_response"</i></td> </tr>
->        <tr> <td>If authentication succeeds:</td><td>Whatever the protected event produces</td> </tr>
->      </table>
->    </td>
->  </tr>
-> </table>
+## User authentication
+All events with user authentication expects a JWT access token to be present in the cookie-header of the request.\
+<code>Admin</code> authentication checks wether the current user is an admin in addition to the check that <code>Logged-in</code> performs.
+<table>
+ <tr>
+   <td><code>Logged-in</code></td>
+   <td>
+     <table class="response-table">
+       <tr> <td>If authentication fails:</td><td><i>Emits "error_response"</i></td> </tr>
+       <tr> <td>If authentication succeeds:</td><td>Whatever the protected event produces</td> </tr>
+     </table>
+   </td>
+ </tr>
+ <tr>
+   <td><code>Admin</code></td>
+   <td>
+     <table class="response-table">
+       <tr> <td>If authentication fails:</td><td><i>Emits "error_response"</i></td> </tr>
+       <tr> <td>If authentication succeeds:</td><td>Whatever the protected event produces</td> </tr>
+     </table>
+   </td>
+ </tr>
+</table>
 
-> [!NOTE] Errors
-> <table class="response-table">
->   <tr>
->     <td>Database error:</td>
->     <td><i>Emits "error_response"</i></td>
->   </tr>
->   <tr>
->     <td>Critical system error:</td>
->     <td><i>Emits "error_response"</i></td>
->   </tr>
-> </table>
+## Errors
+<table class="response-table">
+  <tr>
+    <td>Database error:</td>
+    <td><i>Emits "error_response"</i></td>
+  </tr>
+  <tr>
+    <td>Critical system error:</td>
+    <td><i>Emits "error_response"</i></td>
+  </tr>
+</table>
 
 <table>
   <tr>

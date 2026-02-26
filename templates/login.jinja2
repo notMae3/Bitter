@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<head>
+    <title>{% block title %}Bitter{% endblock %}</title>
+    
+    <meta charset="utf-8">
+    <meta lang="en">
+    
+    <link rel="shortcut icon", type="image/x-icon", href="{{ url_for('static', filename='img/favicon.png') }}">
+    <link rel="stylesheet", type="text/css", href="{{ url_for('static', filename='styles/login.css') }}">
+</head>
+
+<body>
+    {{ login_form.hidden_tag() }}
+
+    <p>{{self.url}}</p>
+    <img id="top-icon" src="../static/img/favicon_256.png" alt="Website icon">
+    <div id="login-parent">
+        <h1>Login</h1>
+        <form id="login-form" action="{{ url_for('login') }}" method="POST">
+            {{ login_form.username(placeholder = "Username") }}
+            {{ login_form.password(placeholder = "Password") }}
+            {{ login_form.submit() }}
+        </form>
+        <div id="goto-signup-form">No account? Sign-up</div>
+    </div>
+    <div id="signup-parent" class="hidden">
+        <h1>Create account</h1>
+        <form id="signup-form" action="{{ url_for('signup') }}" method="POST">
+            {{ signup_form.display_name(placeholder = "Display-name", id = "display-name") }}
+            {{ signup_form.username(placeholder = "Username") }}
+            {{ signup_form.email(placeholder = "Email") }}
+            {{ signup_form.password(placeholder = "Password") }}
+            {{ signup_form.submit() }}
+        </form>
+        <div id="goto-login-form">Already have an account? Login</div>
+    </div>
+
+    {% for message in get_flashed_messages() %}
+    <p class="flash-message">{{message}}</p>
+    {% endfor %}
+</body>
+
+<script src="{{ url_for('static', filename='scripts/form_manager.js') }}"></script>
+<script>
+    const global_flash_message_collection = document.getElementsByClassName("flash-message")
+    const clear_global_flash_messages = () => {
+        Array(...global_flash_message_collection)
+            .forEach(element => element.remove())
+    }
+
+    const csrf_token_element = document.querySelector("#csrf_token")
+    const csrf_token = csrf_token_element ? csrf_token_element.value : null
+
+    function show_message(message) {
+        document.body.lastElementChild.insertAdjacentHTML(
+            "afterend",
+            `<p class="flash-message">${message}</p>`
+        )
+    }
+
+    const login_form = document.getElementById("login-form")
+    const signup_form = document.getElementById("signup-form")
+
+    login_form.reset()
+    login_form.addEventListener("submit", on_form_submit)
+    login_form.addEventListener("response_error", event => {
+        // delete old messages
+        clear_global_flash_messages()
+        
+        event.detail.forEach(error_message => {
+            show_message(error_message)
+        })
+    })
+    login_form.addEventListener("response_success", event => {
+        window.location.reload()
+    })
+
+    signup_form.reset()
+    signup_form.addEventListener("submit", on_form_submit)
+    signup_form.addEventListener("response_error", event => show_message(event.detail))
+    signup_form.addEventListener("response_success", event => {
+        login_parent.classList.remove("hidden")
+        signup_parent.classList.add("hidden")
+
+        clear_global_flash_messages()
+        show_message("Account created successfully")
+    })
+
+    const login_parent = document.getElementById("login-parent")
+    const signup_parent = document.getElementById("signup-parent")
+
+    const flip_form_visibility_func = () => {
+        login_parent.classList.toggle("hidden")
+        signup_parent.classList.toggle("hidden")
+    }
+
+    document.getElementById("goto-signup-form")
+        .addEventListener("click", flip_form_visibility_func)
+    document.getElementById("goto-login-form")
+        .addEventListener("click", flip_form_visibility_func)
+</script>

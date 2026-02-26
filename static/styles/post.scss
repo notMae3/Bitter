@@ -32,16 +32,15 @@
         border-radius: $border-radius;
     }
     
-    >button {
-        background-color: transparent;
+    >#submit-wrapper {
+        position: relative;
+        
         height: 60%;
         aspect-ratio: 1;
 
-        border-radius: 100%;
-        border: 6px;
-        outline: 0;
-
         >.icon {
+            position: absolute;
+
             width: 100%;
             height: 100%;
             border-radius: 100%;
@@ -50,6 +49,19 @@
             box-sizing: border-box;
 
             transform: scaleX(-1);
+        }
+
+        >#submit {
+            position: absolute;
+            background-color: transparent;
+
+            cursor: pointer;
+
+            width: 100%;
+            height: 100%;
+
+            border-radius: 100%;
+            border: none;
         }
     }
 }

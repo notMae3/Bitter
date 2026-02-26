@@ -1,9 +1,9 @@
-{% extends "components/_reply_template.html" %}
+{% extends "components/_reply_template.jinja2" %}
 
 {% set template_type = "post" %}
 
 {% block post_exclusive %}
-<div class="img-container"><img src="{{ url_for('uploads', category='post_images') }}/[post-id].png" alt=""></div>
+<div class="img-container"><img src="{{ url_for('uploads', category='post-images') }}/[post-id].png" alt=""></div>
 <div class="engagement-strip">
     <div class="reply-parent"><svg class="icon"><use href="{{ url_for('static', filename='img/sprites.svg') }}#icon-reply"></use></svg><p class="reply-count">[reply-count]</p></div>
     <div class="like-parent"><svg class="icon transparent-button"><use href="{{ url_for('static', filename='img/sprites.svg') }}#icon-heart"></use></svg><p class="like-count">[like-count]</p></div>

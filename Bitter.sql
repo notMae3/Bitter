@@ -6,6 +6,7 @@ USE Bitter;
 DROP TABLE IF EXISTS Users;
 DROP TABLE IF EXISTS Posts;
 DROP TABLE IF EXISTS Replies;
+DROP TABLE IF EXISTS Likes;
 DROP TABLE IF EXISTS Conversations;
 DROP TABLE IF EXISTS Messages;
 
@@ -27,6 +28,7 @@ CREATE TABLE Posts (
     body VARCHAR(120) NOT NULL,
     contains_image BOOLEAN NOT NULL,
     view_count MEDIUMINT NOT NULL DEFAULT 0,
+    old_like_count MEDIUMINT NOT NULL DEFAULT 0,
     FOREIGN KEY (author_id) REFERENCES Users(user_id)
 );
 

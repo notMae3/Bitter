@@ -27,7 +27,7 @@ body {
         padding: 5px;
         box-sizing: border-box;
 
-        border-radius: $border-radius;
+        border-radius: 100%;
     }
 }
 
@@ -57,10 +57,10 @@ h1 {
 
     row-gap: 20px;
 
-    >#display-name-input,
-    >#username-input,
-    >#email-input,
-    >#password-input {
+    >#display-name,
+    >#username,
+    >#email,
+    >#password {
         background-color: green;
 
         width: 80%;
@@ -77,7 +77,7 @@ h1 {
         border-radius: $border-radius;
     }
 
-    >#submit-button {
+    >#submit {
         width: 80%;
         height: 60px;
 

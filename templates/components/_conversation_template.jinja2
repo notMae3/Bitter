@@ -1,4 +1,4 @@
-{% import "components/_user_header.html" as user_header %}
+{% import "components/_user_header.jinja2" as user_header %}
 
 {% macro style() %}
 <link rel="stylesheet", type="text/css", href="{{ url_for('static', filename='styles/components/conversation.css') }}">

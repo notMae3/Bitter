@@ -1,0 +1,179 @@
+{% import "components/_post_template.jinja2" as post_template %}
+
+{% macro style() %}
+<link rel="stylesheet", type="text/css", href="{{ url_for('static', filename='styles/components/post_feed.css') }}">
+{{ post_template.style() }}
+{% endmacro %}
+
+{% macro script() %}
+<script src="{{ url_for('static', filename='scripts/load_content.js') }}"></script>
+{% endmacro %}
+
+{# single_post_id is only used if is_timeline is false #}
+{% macro content(is_timeline, single_post_id, user_is_admin = False) %}
+<div id="post-feed" class="{{'timeline-feed' if is_timeline else ''}}">
+    <div id="image-inspector" class="hidden">
+        <img src="" alt="Post image">
+        <svg class="transparent-button"><use href="{{ url_for('static', filename='img/sprites.svg') }}#icon-x"></use></svg>
+    </div>
+
+    <div id="post-parent"></div>
+    <div id="load-posts-button" class="load-content-button green-button hidden">Load more</div>
+    <div id="loading-icon-post" class="loading-icon"><svg><use href="{{ url_for('static', filename='img/sprites.svg') }}#icon-loading"></svg></div>
+
+    {% set post_template_html = post_template.content(
+        user_header_parent_id = "[post-element-id]",
+        user_header_parent_class = "post" + (" timeline-feed" if is_timeline else ""),
+        user_is_admin = user_is_admin
+    ) %}
+
+    <script>
+        // used as a global variables
+        let post_cursor_position = 0
+
+        const is_timeline = "{{ is_timeline }}" === "True"
+
+        const timeline_url = "{{ url_for('timeline') }}"
+        const base_post_img_url = "{{ url_for('uploads', category='post-images') }}"
+        const fetch_posts_url = "{{ url_for('fetch_posts') }}?cursor="
+        const fetch_post_url = "{{ url_for('fetch_post') }}?post_id={{ single_post_id }}"
+        const delete_post_url = "{{ url_for('delete_post') }}"
+        const like_post_url = "{{ url_for('like_post') }}"
+        const unlike_post_url = "{{ url_for('unlike_post') }}"
+
+        async function like_post(post_id) {
+            const like_parent = document.querySelector(`#post-${post_id} .like-parent`)
+            const action = like_parent.classList.contains("active") ? "dislike" : "like"
+
+            if (like_parent.classList.contains("disabled")) {
+                return
+            }
+
+            like_parent.classList.toggle("active")
+
+            // update the like-count label
+            const like_paragraph = like_parent.lastElementChild
+            const old_like_count = parseInt(like_paragraph.innerHTML)
+            const client_like_count_change = action === "like" ? 1 : -1
+            like_paragraph.innerHTML = old_like_count + client_like_count_change
+
+            // disable the like button for some time to prevent spamming
+            like_parent.classList.add("disabled")
+            const anti_spam_timeout = new Promise(resolve => setTimeout(resolve, 400))
+            anti_spam_timeout.then(() => like_parent.classList.remove("disabled"))
+
+            // tell the server about the like or unlike
+            const form_data = new FormData()
+            form_data.append("post_id", post_id)
+            form_data.append("csrf_token", csrf_token)
+
+            const resp = await fetch(action === "like" ? like_post_url : unlike_post_url, {
+                method: "PUT",
+                body: form_data
+            })
+            
+            const is_json = resp.headers.get('Content-Type') === "application/json"
+            const resp_content = await (is_json ? resp.json() : resp.text)
+
+            // a 409 means the like-status wasnt changed because the new state, whether liked or
+            // unliked, was already present. undo the visual change of like-status on the client
+            // if an error occured that isnt a 409 error
+            if (!resp.ok && resp.status !== 409) {
+                const undo_like_timeout = new Promise(resolve => setTimeout(resolve, 150))
+                undo_like_timeout.then(() => {
+                    like_parent.classList.toggle("active")
+                    like_paragraph.innerHTML = old_like_count
+                })
+            }
+        }
+
+        function open_post(post_id) {
+            window.location = `{{ url_for("post") }}/${post_id}`
+        }
+
+        async function load_posts(post_parent, template) {
+            // fetch content and check for errors
+            const fetch_url = is_timeline ? fetch_posts_url + post_cursor_position : fetch_post_url
+            let posts = await attempt_to_fetch_content(fetch_url, post_parent)
+            if (posts === null) {
+                return
+            }
+
+            // if this post-feed is for a single post and the fetched post doesnt contain any data: tell the user
+            if (!is_timeline && !Object.keys(posts).length) {
+                loading_icon_post.classList.add("hidden")
+                loading_icon_post.insertAdjacentHTML(
+                    "afterend",
+                    "<p class='flash-message'>Couldn't find post</p")
+                return
+            }
+
+            // if the fetched content is a single post it will not be an array but a JSON object, therefore turn the
+            // fetched content into an array to simplify the code below
+            if (!Array.isArray(posts)) {
+                posts = [posts]
+            }
+
+            // add the new post(s) to DOM
+            posts.forEach(post => append_post(post, post_parent, template))
+
+            // update the cursor and visibility of relevant elements
+            loading_icon_post.classList.add("hidden")
+
+            const last_post = posts.at(-1)
+            if (last_post) {
+                post_cursor_position = last_post.post_id
+            }
+
+            // decide whether to show or hide the button to load more repleies
+            const no_more_to_load = (last_post && last_post.post_idx === 0) || (!is_timeline)
+            const nothing_was_loaded = !post_cursor_position
+
+            if (nothing_was_loaded) {
+                append_nothing_to_load(loading_icon_post)
+            }
+
+            if ( no_more_to_load || nothing_was_loaded ) {
+                load_posts_button.classList.add("hidden")
+            }
+            // theres more to load
+            else {
+                load_posts_button.classList.remove("hidden")
+            }
+        }
+
+        const post_parent = document.getElementById("post-parent")
+        const post_template = `{{ post_template_html }}`
+        const loading_icon_post = document.getElementById("loading-icon-post")
+        const load_posts_button = document.getElementById("load-posts-button")
+
+        // hook up the post-image inspector
+        const image_inspector = document.getElementById("image-inspector")
+        image_inspector.addEventListener("click", () => {
+            image_inspector.classList.add("hidden")
+            image_inspector.querySelector("img").src = ""
+        })
+        image_inspector.firstElementChild.addEventListener("click", (event) => {
+            event.stopPropagation()
+        })
+
+        // get the post-creation form defined in base.jinja2 and append a post if it successfully created a post, but only
+        // if this post-feed is a timeline
+        if (is_timeline) {
+            document.getElementById("post-creation-form").addEventListener("response_success", event => {
+                clear_global_flash_messages()
+
+                append_post(event.detail, post_parent, post_template, true)
+            })
+        }
+
+        // hook up the button to load more posts
+        load_posts_button.addEventListener("click", () => {
+            load_posts(post_parent, post_template)
+        })
+
+        // load the inital posts
+        load_posts(post_parent, post_template)
+    </script>
+</div>
+{% endmacro %}

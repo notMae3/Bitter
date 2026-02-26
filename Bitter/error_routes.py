@@ -1,42 +1,53 @@
 from . import app
 from .utils.misc_utils import (
-    render_template_with_defaults,
+    make_response_with_template,
     format_logging_info,
-    DatabaseException
+    make_error_response
 )
-from flask import redirect, url_for, flash
+from mysql.connector.errors import DatabaseError, InterfaceError
+from flask import redirect, url_for, flash, request
 from werkzeug.exceptions import HTTPException
-import traceback
 
-@app.errorhandler(DatabaseException)
-def on_database_error(error : DatabaseException):
-    app.logger.error(format_logging_info(status_code = error.code))
-    flash("Error - Database error")
-    return redirect(url_for("timeline"))
+@app.errorhandler(DatabaseError)
+@app.errorhandler(InterfaceError)
+def on_database_error(_error : DatabaseError | InterfaceError) -> None:
+    # log database exceptions here
+    app.logger.error(format_logging_info())
+
+    # tell the user about the error
+    is_api_request = str(request.url_rule).startswith("/api/")
+    if is_api_request:
+        return make_error_response("Database error", 503)
+    else:
+        flash("Error - Database error")
+        return redirect(url_for("timeline"))
 
 @app.errorhandler(HTTPException)
-def on_http_exception(error : HTTPException):
-    # log general uncaught http exceptions here. see after_request in
-    # main_routes.py for caught errors
+def on_http_exception(error : HTTPException) -> None:
+    # log general uncaught http exceptions here
 
-    # the error.get_response() is auto generated and doesnt contain any
-    # interesting data, therefore dont log it
-    app.logger.info(format_logging_info(status_code=error.code))
-
-    return render_template_with_defaults(
-        "error.html",
-        status_code = error.code,
-        status_str = error.description
-    )
+    # tell the user about the error
+    is_api_request = str(request.url_rule).startswith("/api/")
+    if is_api_request:
+        return make_error_response(error.description, error.code)
+    else:
+        return make_response_with_template(
+            "error.jinja2",
+            status_code = error.code,
+            status_str = error.description
+        )
 
 @app.errorhandler(Exception)
-def on_exception(error : Exception):
+def on_exception(_error : Exception) -> None:
     # log general app related exceptions here. if this point is reached then
-    # theres a critical bug somewhere
+    # there's a critical bug somewhere
 
-    error_str = traceback.format_exc().encode('unicode_escape').decode("utf-8")
-    app.logger.critical(error_str)
+    app.logger.critical(format_logging_info())
     
-    flash("Error - A critical system error has occured. Sorry about that.")
-
-    return redirect(url_for("timeline"))
+    # tell the user about the error
+    is_api_request = str(request.url_rule).startswith("/api/")
+    if is_api_request:
+        return make_error_response("A critical system error has occured. Sorry about that", 500)
+    else:
+        flash("Error - A critical system error has occured. Sorry about that")
+        return redirect(url_for("timeline"))

@@ -12,7 +12,7 @@
 %}
 <div id="{{ user_header_parent_id }}" class="{{ user_header_parent_class }}">
     <div class="pfp-strip">
-        <img src="{{ url_for('uploads', category='user_pfps') }}/[user-id].png" alt="User's profile picture">
+        <img src="{{ url_for('uploads', category='user-pfps') }}/[user-id].png" alt="User's profile picture">
     </div>
     <div class="content">
         <div class="user{{ ' single-line' if user_header_single_line else '' }}">

@@ -1,21 +1,21 @@
-{% extends "base.html" %}
-{% import "components/_feed.html" as feed %}
+{% extends "base.jinja2" %}
+{% import "components/_post_feed.jinja2" as post_feed %}
 
 {% set is_timeline = True %}
 {% set primary_page = True %}
 {% set page_name = "Timeline" %}
 
 {% block style %}
-{{ feed.style() }}
+{{ post_feed.style() }}
 {% endblock %}
 
 {% block script %}
-{{ feed.script() }}
+{{ post_feed.script() }}
 {% endblock %}
 
 {% block content %}
 {% for message in get_flashed_messages() %}
-<p class="flash-message">{{message}}</p>
+<p class="flash-message">{{ message }}</p>
 {% endfor %}
-{{ feed.content(is_timeline, user_is_admin = user_is_admin) }}
+{{ post_feed.content(is_timeline, user_is_admin = user_is_admin) }}
 {% endblock %}

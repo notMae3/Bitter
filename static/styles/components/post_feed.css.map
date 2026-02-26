@@ -1,0 +1,10 @@
+{
+    "version": 3,
+    "mappings": "AAEA,AAAA,UAAU,AAAC,CACP,OAAO,CAAE,IAAI,CACb,cAAc,CAAE,MAAM,CACtB,OAAO,CAAE,IAAI,CAChB",
+    "sources": [
+        "post_feed.scss",
+        "../_variables.scss"
+    ],
+    "names": [],
+    "file": "post_feed.css"
+}

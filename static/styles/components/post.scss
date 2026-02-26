@@ -7,7 +7,7 @@
         padding-top: $post-reply-half-margin;
     }
 
-    // if this post is being displayed in a timeline feed
+    // if this post is part of a post-feed thats used in a timeline
     &.timeline-feed {
         cursor: pointer;
     }
@@ -47,7 +47,7 @@
         }
 
         >.engagement-strip {
-            height: $feed-post-engagement-bar-height;
+            height: $post-feed-post-engagement-bar-height;
             width: 80%;
             margin: 0px auto $post-margin-right auto;
 
@@ -61,7 +61,7 @@
             >div {
                 display: flex;
                 align-items: center;
-                height: $feed-post-engagement-bar-height;
+                height: $post-feed-post-engagement-bar-height;
 
                 >.icon {
                     max-height: 100%;

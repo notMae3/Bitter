@@ -1,30 +1,33 @@
-from functools import wraps
+from .config import APP_CONFIG
 from flask import Flask
 from flask_socketio import SocketIO
+from flask_wtf import CSRFProtect
 from mysql.connector import pooling
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
-import os, dotenv, logging
+import time, os, dotenv, logging
 
 dotenv.load_dotenv()
+CWD = Path.cwd()
 
 # setup and config Flask, MySQL and SocketIO
 app = Flask(
     __name__,
-    template_folder = Path.cwd() / "templates",
-    static_folder = Path.cwd() / "static"
+    template_folder = CWD / "templates",
+    static_folder = CWD / "static"
 )
 
 app.config.update(
-    SECRET_KEY = os.getenv("FLASK_SECRET_KEY", "pass123"),
-    SESSION_PERMANENT = False,
-    SESSION_TYPE = "filesystem",
-    UPLOAD_FOLDER = Path.cwd() / "uploads"
+    SECRET_KEY = os.getenv("FLASK_SECRET_KEY", "SuperSecretAndCoolFlaskSecretKey"),
+    UPLOAD_FOLDER = CWD / "uploads",
+    WTF_CSRF_ENABLED = APP_CONFIG["CSRF_session_tokens_enabled"]
 )
 
+csrf = CSRFProtect(app)
+
 socketio = SocketIO(app)
-socket_rooms : dict[int, list[dict[str, int | str]]] = {}
-# ^ {conversation_id : [{"user_id": user_id, "sid": request.sid},]}
+socket_rooms : dict[int, list[dict[str, str]]] = {}
+# ^ {conversation_id : [ {"user_id": user_id, "sid": request.sid}, ]}
 
 db_pool = pooling.MySQLConnectionPool(
     pool_name = "mysql_pool",
@@ -40,14 +43,14 @@ from . import (
     main_routes,
     error_routes,
     db_api,
-    socket_api,
-    config
+    socket_api
 )
 
-def setup_logging():
-    log_dir_path = Path.cwd() / "logs"
-    if not log_dir_path.exists():
-        log_dir_path.mkdir()
+from .utils import db_utils
+
+def setup_logging() -> None:
+    log_dir_path = CWD / "logs"
+    log_dir_path.mkdir(exist_ok = True)
 
     file_handler = RotatingFileHandler(
         log_dir_path / "Bitter.log",
@@ -55,27 +58,36 @@ def setup_logging():
         backupCount = config.LOGGING["backup_count"]
     )
 
-    file_handler.setFormatter(logging.Formatter(
-        "%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]"
-    ))
+    logging.Formatter.converter = time.gmtime
+    formatter = logging.Formatter("%(asctime)s+00:00 %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]")
+    file_handler.setFormatter(formatter)
     
     file_handler.setLevel(config.LOGGING["log_level"])
     app.logger.setLevel(config.LOGGING["log_level"])
     app.logger.addHandler(file_handler)
 
-    app.logger.info("Flask startup")
+    app.logger.info("Logging enabled")
 
 
 # propegate the Flask socketio run() to Bitter
-@wraps(socketio.run)
-def run(*args, **kwargs):
-    """Run the Flask and Flask SocketIO webserver. The first argument, app, is not expected.
+def run(host: str | None = None,
+        port: int | None = None,
+        debug: bool = True,
+        log_output: bool = ...,
+        allow_unsafe_werkzeug: bool = False) -> None:
+    """Run the Flask and Flask SocketIO webserver. Effectively a wrapper of ```flask_socketio```'s ```SocketIO.run```.
     """
-    # setup logging
     setup_logging()
 
-    # ensure the primary admin account exists
-    db_api.ensure_admin_account_exists()
+    db_utils.ensure_admin_account_exists()
 
-    kwargs["app"] = app
-    socketio.run(*args, **kwargs)
+    app.logger.info("Flask startup")
+
+    socketio.run(
+        app = app,
+        host = host,
+        port = port,
+        debug = debug,
+        log_output = log_output,
+        allow_unsafe_werkzeug = allow_unsafe_werkzeug
+    )

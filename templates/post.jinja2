@@ -1,0 +1,127 @@
+{% extends "base.jinja2" %}
+{% import "components/_post_feed.jinja2" as post_feed %}
+{% import "components/_reply_template.jinja2" as reply_template %}
+
+{% set is_timeline = False %}
+{% set primary_page = False %}
+{% set page_name = "Post" %}
+
+{% block title %}Bitter - Post{% endblock %}
+
+{% block style %}
+<link rel="stylesheet", type="text/css", href="{{ url_for('static', filename='styles/post.css') }}">
+{{ post_feed.style() }}
+{# reply_template.style() is not called since its dependencies are included in post_feed.style() #}
+{% endblock %}
+
+{% block script %}
+{{ post_feed.script() }}
+{% endblock %}
+
+{% block content %}
+    {% for message in get_flashed_messages() %}
+    <p class="flash-message">{{ message }}</p>
+    {% endfor %}
+
+    {{ post_feed.content(is_timeline = is_timeline, single_post_id = post_id, user_is_admin = user_is_admin) }}
+    <form id="new-reply-form" action="{{ url_for('create_reply') }}" method="post" class="hidden">
+        <input id="parent-post-id-input" type="hidden" name="post_id" value="{{ post_id }}">
+        {{ reply_creation_form.reply_body(placeholder = "Reply", id = "reply-text-input") }}
+        
+        <div id="submit-wrapper">
+            <svg class="icon transparent-button"><use href="{{ url_for('static', filename='img/sprites.svg') }}#icon-back"></use></svg>
+            {{ reply_creation_form.submit() }}
+        </div>
+    </form>
+
+    <div id="loading-icon-replies" class="loading-icon"><svg><use href="{{ url_for('static', filename='img/sprites.svg') }}#icon-loading"></svg></div>
+
+    <div id="past-reply-container"></div>
+
+    <div id="load-replies-button" class="load-content-button green-button hidden">Load more</div>
+
+    {% set reply_template_html = reply_template.content(
+        user_header_parent_id = "[reply-element-id]",
+        user_header_parent_class = "reply" + (" timeline-feed" if is_timeline else ""),
+        user_is_admin = user_is_admin
+    ) %}
+
+    <script>
+        // used as a global variable
+        let reply_cursor_position = 0
+
+        async function load_replies(fetch_url, parent_element, template) {
+            // fetch content and check for errors
+            const fetch_url_with_cursor = fetch_url + reply_cursor_position
+            const replies = await attempt_to_fetch_content(fetch_url_with_cursor, parent_element)
+            if (replies === null) {
+                return
+            }
+
+            // add the new replies to DOM
+            replies.forEach(reply => append_reply(reply, parent_element, template))
+
+            // update the cursor and visibility of relevant elements
+            document.getElementById("loading-icon-replies").classList.add("hidden")
+
+            const last_reply = replies.at(-1)
+            if (last_reply) {
+                reply_cursor_position = last_reply.reply_id
+            }
+            
+            // decide whether to show or hide the button to load more replies
+            const no_more_to_load = last_reply && last_reply.reply_idx === 0
+            const nothing_was_loaded = !reply_cursor_position
+
+            if (nothing_was_loaded) {
+                append_nothing_to_load(loading_icon_replies)
+            }
+
+            if ( no_more_to_load || nothing_was_loaded ) {
+                document.getElementById("load-replies-button").classList.add("hidden")
+            }
+            // theres more to load
+            else {
+                document.getElementById("load-replies-button").classList.remove("hidden")
+            }
+        }
+
+        const fetch_replies_url = "{{ url_for('fetch_replies', post_id = post_id) }}&cursor="
+        const delete_reply_url = "{{ url_for('delete_reply') }}"
+        
+        const reply_parent = document.getElementById("past-reply-container")
+        const reply_template = `{{ reply_template_html }}`
+        const loading_icon_replies = document.getElementById("loading-icon-replies")
+
+        // hook up the new-reply form
+        const new_reply_form = document.getElementById("new-reply-form")
+        new_reply_form.reset()
+        new_reply_form.addEventListener("submit", on_form_submit)
+        new_reply_form.addEventListener("response_error", event => {
+            clear_global_flash_messages()
+
+            event.detail.forEach(error_message => {
+                reply_parent.innerHTML = `<p class="flash-message">${event.detail}</p>` + reply_parent.innerHTML
+            })
+        })
+        new_reply_form.addEventListener("response_success", event => {
+            clear_global_flash_messages()
+
+            append_reply(event.detail, reply_parent, reply_template, true)
+            new_reply_form.reset()
+        })
+
+        // hook up the button to load more replies
+        const load_replies_button = document.getElementById("load-replies-button")
+        load_replies_button.addEventListener("click", () => {
+            load_replies(fetch_replies_url, reply_parent, reply_template)
+        })
+        
+        // load the initial replies and then make the form to create new replies visible
+        const load_replies_promise = load_replies(fetch_replies_url, reply_parent, reply_template)
+        load_replies_promise.then(() => {
+            new_reply_form.classList.remove("hidden")
+        })
+    </script>
+{% endblock %}
+

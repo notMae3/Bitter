@@ -60,8 +60,9 @@ body {
         }
 
         // make the top icon slightly bigger than the other icons
-        &.top-icon>img {
+        &.top-icon>.icon {
             padding: ($sidebar-item-height - $sidebar-top-icon-size)/2;
+            border-radius: 100%;
         }
 
         // aka the buttons that redirect to other sites
@@ -203,7 +204,7 @@ body {
             align-items: center;
         }
 
-        #post-text-input {
+        #post-body-input {
             resize: none;
             
             width: 80%;
@@ -297,6 +298,47 @@ body {
     &:active {background-color: $green-button-active-color;}
 
     user-select: none;
+}
+
+#image-inspector {
+    background-color: $popup-background-color;
+    z-index: 1;
+    
+    cursor: pointer;
+    user-select: none;
+
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    >img {
+        cursor: default;
+        pointer-events: none;
+        object-fit: contain;
+
+        max-width: 70%;
+        max-height: 80%;
+
+        flex-grow: 1;
+        text-align: center;
+    }
+
+    >.transparent-button {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        top: 0;
+        right: 0;
+
+        margin: 10px;
+        border-radius: $border-radius;
+    }
 }
 
 .flash-message {

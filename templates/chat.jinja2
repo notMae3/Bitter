@@ -1,9 +1,9 @@
-{% extends "base.html" %}
-{% import "components/_user_header.html" as user_header %}
-{% import "components/_message_template.html" as message_template %}
+{% extends "base.jinja2" %}
+{% import "components/_user_header.jinja2" as user_header %}
+{% import "components/_message_template.jinja2" as message_template %}
 
 {% set primary_page = False %}
-{% set page_name = "Conversation" %}
+{% set page_name = "Chat" %}
 {% set referer = url_for("chat") %}
 
 {% block title %}Bitter - Chat{% endblock %}
@@ -41,21 +41,20 @@
 </form>
 
 {% for message in get_flashed_messages() %}
-<p class="flash-message">{{message}}</p>
+<p class="flash-message">{{ message }}</p>
 {% endfor %}
 
 
 {% set message_template_html = message_template.content() %}
 
 <script>
-    let message_form = document.getElementById("new-message-form")
+    const message_form = document.getElementById("new-message-form")
     message_form.reset()
     message_form.addEventListener("submit", (event) => {
-        event.preventDefault()
-
-        document.querySelectorAll(".flash-message").forEach(element => {
-            element.remove()
-        })
+        // remove any previous error message
+        clear_global_flash_messages()
+        
+        event.preventDefault();
 
         let form_data = new FormData(message_form)
         let message_body = form_data.get("message-body")
@@ -68,20 +67,20 @@
 
     let message_cursor_position = 0
 
-    let message_container = document.getElementById("message-container")
-    let loading_icon = document.querySelector(".loading-icon")
+    const message_container = document.getElementById("message-container")
+    const loading_icon = document.querySelector(".loading-icon")
 
-    let load_messages_button = document.getElementById("load-messages-button")
+    const message_collection = message_container.getElementsByClassName("message")
+
+    const load_messages_button = document.getElementById("load-messages-button")
     load_messages_button.addEventListener("click", request_messages)
 
-    let fetch_user_info_base_url = `{{ url_for('fetch_profile_from_username') }}?username=`
-    let timeline_url = `{{ url_for('timeline') }}`
-    let user_header_template = `{{ user_header_template }}`
-    let message_template = `{{ message_template_html }}`
+    const fetch_user_info_base_url = "{{ url_for('fetch_profile_from_username') }}?username="
+    const timeline_url = "{{ url_for('timeline') }}"
+    const user_header_template = `{{ user_header_template }}`
+    const message_template = `{{ message_template_html }}`
 
     request_user_info()
-    request_messages()
-    register_for_realtime()
 </script>
 
 {% endblock %}

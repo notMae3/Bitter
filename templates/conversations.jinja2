@@ -1,0 +1,150 @@
+{% extends "base.jinja2" %}
+{% import "components/_conversation_template.jinja2" as conversation_template %}
+
+{% set primary_page = True %}
+{% set page_name = "Conversations" %}
+
+{% block title %}Bitter - Conversations{% endblock %}
+
+{% block style %}
+<link rel="stylesheet", type="text/css", href="{{ url_for('static', filename='styles/conversations.css') }}">
+{{ conversation_template.style() }}
+{% endblock %}
+
+{% block script %}
+<script src="{{ url_for('static', filename='scripts/load_content.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div id="new-chat-popup" class="hidden">
+    <div class="content">
+        <h1>New chat</h1>
+        <form id="new-chat-creation-form" action="{{ url_for('create_conversation') }}" method="post">
+            {{ conversation_creation_form.username(placeholder = "Username", id = "new-chat-username-input") }}
+            {{ conversation_creation_form.submit(class = "start-chat-button") }}
+        </form>
+    </div>
+    <svg class="transparent-button"><use href="{{ url_for('static', filename='img/sprites.svg') }}#icon-x"></use></svg>
+</div>
+
+<svg id="new-chat-button" class="transparent-button" title="New chat"><use href="{{ url_for('static', filename='img/sprites.svg') }}#icon-x"></use></svg>
+
+{% for message in get_flashed_messages() %}
+<p class="flash-message">{{message}}</p>
+{% endfor %}
+
+<div id="conversation-parent"></div>
+
+<div id="load-conversations" class="load-content-button green-button hidden">Load more</div>
+
+<div id="loading-icon-conversation" class="loading-icon"><svg><use href="{{ url_for('static', filename='img/sprites.svg') }}#icon-loading"></svg></div>
+
+{% set conversation_template_html = conversation_template.content() %}
+
+<script>
+    // used as a global variable
+    let conversation_cursor_position = 0
+
+    function open_conversation(username) {
+        window.location = `{{ url_for('chat') }}/${username}`
+    }
+
+    async function load_conversations(fetch_url, parent_element, template) {
+        // fetch content and check for errors
+        const fetch_url_with_cursor = fetch_url + conversation_cursor_position
+        const conversations = await attempt_to_fetch_content(fetch_url_with_cursor, parent_element)
+        if (conversations === null) {
+            return
+        }
+
+        // add the new conversations to DOM
+        conversations.forEach(conversation => append_conversation(conversation, parent_element, template))
+
+        // remove old error message
+        clear_global_flash_messages()
+
+        // update the cursor and visibility of relevant elements
+        document.getElementById("loading-icon-conversation").classList.add("hidden")
+
+        const last_conversation = conversations.at(-1)
+        if (last_conversation) {
+            conversation_cursor_position = last_conversation.conversation_id
+        }
+        
+        // decide whether to show or hide the button to load more repleies
+        const no_more_to_load = last_conversation && last_conversation.conversation_idx === 0
+        const nothing_was_loaded = !conversation_cursor_position
+
+        if (nothing_was_loaded) {
+            append_nothing_to_load(loading_icon_conversation)
+        }
+
+        if ( no_more_to_load || nothing_was_loaded ) {
+            document.getElementById("load-conversations").classList.add("hidden")
+        }
+        // theres more to load
+        else {
+            document.getElementById("load-conversations").classList.remove("hidden")
+        }
+    }
+
+    const fetch_conversations_url = "{{ url_for('fetch_conversations') }}?cursor="
+
+    const conversation_parent = document.getElementById("conversation-parent")
+    const conversation_template = `{{ conversation_template_html }}`
+    const loading_icon_conversation = document.getElementById("loading-icon-conversation")
+
+    // hook up the clicking of the popup thats used to create a new chat
+    const new_chat_popup = document.getElementById("new-chat-popup")
+    const new_chat_popup_content = new_chat_popup.firstElementChild
+    new_chat_popup.addEventListener("click", () => {
+        new_chat_popup.classList.toggle("hidden")
+    })
+    new_chat_popup_content.addEventListener("click", (event) => {
+        event.stopPropagation()
+    })
+
+    // hook up the new-chat form
+    const new_chat_form = document.getElementById("new-chat-creation-form")
+    new_chat_form.reset()
+    new_chat_form.addEventListener("submit", on_form_submit)
+    new_chat_form.addEventListener("response_error", event => {
+        // remove old error messages
+        new_chat_popup_content.querySelectorAll(".flash-message")
+            .forEach(element => element.remove())
+
+        // add new error message
+        event.detail.forEach(error_message => {
+            new_chat_popup_content.insertAdjacentHTML(
+                "beforeend",
+                `<p class="flash-message">${event.detail}</p>`
+            )
+        })
+    })
+    new_chat_form.addEventListener("response_success", event => {
+        clear_global_flash_messages()
+
+        append_conversation(event.detail, conversation_parent, conversation_template, true)
+        new_chat_popup.classList.add("hidden")
+    })
+
+    // hook up the button that triggers the chat creation popup
+    const new_chat_button = document.getElementById("new-chat-button")
+    new_chat_button.addEventListener("click", () => {
+        new_chat_popup_content.querySelectorAll(".flash-message")
+            .forEach(element => element.remove())
+        
+        new_chat_form.reset()
+        new_chat_popup.classList.toggle("hidden")
+    })
+
+    // hook up the button to load more conversations
+    const load_conversations_button = document.getElementById("load-conversations")
+    load_conversations_button.addEventListener("click", () => {
+        load_conversations(fetch_conversations_url, conversation_parent, conversation_template)
+    })
+
+    // load the initial conversations
+    load_conversations(fetch_conversations_url, conversation_parent, conversation_template)
+</script>
+{% endblock %}

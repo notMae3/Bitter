@@ -6,8 +6,8 @@
 }
 
 .pfp-strip {
-    min-width: $feed-post-pfp-strip-width;
-    max-width: $feed-post-pfp-strip-width;
+    min-width: $post-feed-post-pfp-strip-width;
+    max-width: $post-feed-post-pfp-strip-width;
 
     margin: 0 2.5px 0 2.5px;
 
@@ -33,7 +33,7 @@
             column-gap: 5px;
             align-items: end;
 
-            height: $feed-post-pfp-strip-width/2;
+            height: $post-feed-post-pfp-strip-width/2;
 
             &.single-line {
                 display: grid;

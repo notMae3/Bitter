@@ -1,7 +1,8 @@
 # Custom
-uploads/post_images/*
-uploads/user_pfps/*
+uploads/post-images/*
+uploads/user-pfps/*
 logs/*
+.vscode/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

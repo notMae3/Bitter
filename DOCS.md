@@ -53,7 +53,7 @@ All routes with user authentication expects a JWT access token to be present in 
 All non-<code>GET</code> API routes expect a csrf_token to be present in the request content.\
 This token is automatically generated and included in the forms present in HTML pages produced by non-API routes.
 <table class="response-table">
-  <tr> <td>If csrf_token is missing or malformed:</td><td>[400] [application/json] {"errors": [ <i>"errors": <i>list[str]</i></i> ]}</td> </tr>
+  <tr> <td>If csrf_token is missing or malformed:</td><td>[400] [application/json] {"errors": <i>list[str]</i>}</td> </tr>
   <tr> <td>If authentication succeeds:</td><td>Whatever the protected path produces</td> </tr>
 </table>
 

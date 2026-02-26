@@ -1,4 +1,4 @@
-<style>
+<!-- <style>
     table td {
         word-break: break-word;
         white-space: normal;
@@ -15,7 +15,7 @@
     .no-wrap {
         word-break: unset;
     }
-</style>
+</style> -->
 
 # API documentation
 

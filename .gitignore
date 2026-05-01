@@ -1,7 +1,7 @@
 # Custom
-uploads/post-images/*
-uploads/user-pfps/*
-logs/*
+uploads/post-images
+uploads/user-pfps
+logs/Bitter.log*
 .vscode/
 
 # Byte-compiled / optimized / DLL files

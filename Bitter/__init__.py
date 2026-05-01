@@ -50,7 +50,6 @@ from .utils import db_utils
 
 def setup_logging() -> None:
     log_dir_path = CWD / "logs"
-    log_dir_path.mkdir(exist_ok = True)
 
     file_handler = RotatingFileHandler(
         log_dir_path / "Bitter.log",
